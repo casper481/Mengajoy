@@ -8,6 +8,7 @@ import AreaOrtu from './pages/AreaOrtu'
 import GerbangOrtu from './pages/GerbangOrtu'
 import HalamanPulau from './pages/HalamanPulau'
 import HalamanQuran from './pages/HalamanQuran'
+import HalamanSurat from './pages/HalamanSurat'
 import LatihanHarian from './pages/LatihanHarian'
 import Tamat from './pages/Tamat'
 import { stageById } from './data/stages'
@@ -29,6 +30,7 @@ type Layar =
   | { nama: 'ortu' }
   | { nama: 'latihan' }
   | { nama: 'tamat' }
+  | { nama: 'surat'; nomor: number }
 
 const LAYAR_ORTU = ['gerbang', 'ortu']
 
@@ -79,7 +81,7 @@ export default function App() {
         )
         break
       case 'pulau':
-        isi = layar.id === 6 ? <HalamanQuran onKembali={() => ke({ nama: 'peta' })} onSertifikat={() => ke({ nama: 'tamat' })} /> : <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
+        isi = layar.id === 6 ? <HalamanQuran onKembali={() => ke({ nama: 'peta' })} onSertifikat={() => ke({ nama: 'tamat' })} onSurat={(nomor) => ke({ nama: 'surat', nomor })} /> : <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
         break
       case 'stage': {
         const pulau = stageById(layar.id).pulau
@@ -99,6 +101,9 @@ export default function App() {
         break
       case 'tamat':
         isi = <Tamat onQuran={() => ke({ nama: 'pulau', id: 6 })} onKembali={() => ke({ nama: 'peta' })} />
+        break
+      case 'surat':
+        isi = <HalamanSurat key={layar.nomor} nomor={layar.nomor} onKembali={() => ke({ nama: 'pulau', id: 6 })} />
         break
       case 'lemari':
         isi = <Lemari onKembali={() => ke({ nama: 'peta' })} />

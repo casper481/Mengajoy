@@ -113,6 +113,13 @@ Rekam bersama ustaz, lalu simpan dengan **nama file persis seperti di tabel**.
 
 **Total: 81 file audio.**
 
+## D. Level 6 (ayat) — menunggu teks resmi
+
+Audio ayat **wajib dari qari berizin** dan dibuat setelah teks Mushaf Standar Indonesia (tashih LPMQ) dimasukkan:
+
+- Per ayat: `public/audio/ayat/<surah>-<ayat>.mp3` (contoh `112-1.mp3`)
+- Per kata (opsional, untuk "Ikuti per kata"): `public/audio/kata/<surah>-<ayat>-<urutan kata>.mp3` (contoh `112-1-1.mp3`)
+
 ## Yang TIDAK perlu direkam
 
 - Efek suara "ting", sorakan, dan suara kartu sudah dibuat otomatis oleh app (Web Audio API).

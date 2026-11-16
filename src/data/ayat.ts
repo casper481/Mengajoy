@@ -1,25 +1,30 @@
 /**
  * ============================================================
- *  LEVEL 6 — MEMBACA AYAT (MENUNGGU TEKS RESMI)
+ *  LEVEL 6 — MEMBACA AYAT
  * ============================================================
- *  File ini SENGAJA belum berisi teks ayat.
+ *  TEKS AYAT SENGAJA MASIH KOSONG.
  *
- *  Teks ayat WAJIB diambil dari Mushaf Standar Indonesia yang
- *  sudah ditashih Lajnah Pentashihan Mushaf Al-Qur'an (LPMQ)
- *  Kemenag, dan app perlu melalui proses pentashihan sebelum terbit.
- *  Jangan mengetik atau menyalin teks ayat dari sumber lain.
+ *  Teks WAJIB diambil dari Mushaf Standar Indonesia yang sudah
+ *  ditashih Lajnah Pentashihan Mushaf Al-Qur'an (LPMQ) Kemenag,
+ *  dan app perlu melalui proses pentashihan sebelum terbit.
+ *  JANGAN mengetik teks ayat dari ingatan atau menyalin dari
+ *  sumber yang tidak resmi.
  *
- *  Setelah teks resmi didapat, isi AYAT dengan format:
- *  {
- *    surah: 112,                 // nomor surat
- *    ayat: 1,                    // nomor ayat
- *    kata: [                     // dipecah per kata
- *      { arab: '…', latin: '…', audio: '112-1-1' },
- *    ],
- *    audioAyat: '112-1',         // /public/audio/ayat/112-1.mp3 (qari berizin)
- *  }
+ *  Cara mengisi (setelah teks resmi didapat):
+ *  1. Isi BASMALAH (dipakai sebagai pembuka surat selain Al-Fatihah).
+ *  2. Tambahkan setiap ayat ke TEKS_AYAT, dipecah per kata, contoh bentuk:
+ *     {
+ *       surah: 112, ayat: 1,
+ *       kata: [ { arab: '…', latin: '…', audio: '112-1-1' }, … ],
+ *       audioAyat: '112-1',
+ *     }
+ *  3. Audio (qari berizin):
+ *     - per ayat : /public/audio/ayat/<audioAyat>.mp3   (contoh 112-1.mp3)
+ *     - per kata : /public/audio/kata/<audio>.mp3       (contoh 112-1-1.mp3)
+ *  Surat otomatis terbuka di app begitu SEMUA ayatnya sudah diisi.
  * ============================================================
  */
+import { CONTOH_UJI } from './contoh-uji'
 
 export type KataAyat = { arab: string; latin: string; audio?: string }
 export type Ayat = { surah: number; ayat: number; kata: KataAyat[]; audioAyat?: string }
@@ -37,5 +42,25 @@ export const SURAH_RENCANA: { nomor: number; nama: string; arti: string; jumlahA
   { nomor: 103, nama: "Al-'Ashr", arti: 'Masa', jumlahAyat: 3 },
 ]
 
-/** KOSONG sampai teks Mushaf Standar Indonesia (tashih LPMQ) tersedia. */
-export const AYAT: Ayat[] = []
+/** Basmalah pembuka surat. KOSONG sampai teks resmi tersedia. */
+export const BASMALAH: KataAyat[] = []
+
+/** Teks ayat. KOSONG sampai teks Mushaf Standar Indonesia (tashih LPMQ) tersedia. */
+export const TEKS_AYAT: Ayat[] = []
+
+// Hanya untuk uji coba tampilan di komputer pengembang (tidak pernah ikut ke app yang dirilis).
+const SEMUA_AYAT: Ayat[] = TEKS_AYAT.length ? TEKS_AYAT : CONTOH_UJI.ayat
+const PEMBUKA: KataAyat[] = BASMALAH.length ? BASMALAH : CONTOH_UJI.pembuka
+
+export const ayatSurah = (nomor: number) => SEMUA_AYAT.filter((a) => a.surah === nomor).sort((a, b) => a.ayat - b.ayat)
+
+export const pembukaSurah = (nomor: number) => (nomor === 1 || nomor === 9 ? [] : PEMBUKA)
+
+/** Surat terbuka hanya jika jumlah ayat di data sama dengan jumlah ayat surat. */
+export const suratSiap = (nomor: number) => {
+  const r = SURAH_RENCANA.find((s) => s.nomor === nomor)
+  return !!r && ayatSurah(nomor).length === r.jumlahAyat
+}
+
+export const audioAyat = (id: string) => `/audio/ayat/${id}.mp3`
+export const audioKata = (id: string) => `/audio/kata/${id}.mp3`

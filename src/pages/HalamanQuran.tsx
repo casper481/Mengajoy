@@ -8,14 +8,13 @@ import BarAtas from '../components/BarAtas'
 import { Konfeti } from '../components/Efek'
 import { IkonGembok } from '../components/Ikon'
 import NuriBicara from '../components/NuriBicara'
-import { AYAT, SURAH_RENCANA } from '../data/ayat'
+import { SURAH_RENCANA, suratSiap } from '../data/ayat'
 import { pop } from '../lib/efekSuara'
 import { useProgres } from '../lib/progres'
 
-export default function HalamanQuran({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
-  const { semuaTamat } = useProgres()
+export default function HalamanQuran({ onKembali, onSertifikat, onSurat }: { onKembali: () => void; onSertifikat: () => void; onSurat: (nomor: number) => void }) {
+  const { p, semuaTamat } = useProgres()
   const [info, setInfo] = useState<string | null>(null)
-  const tersedia = AYAT.length > 0
 
   return (
     <div className="flex min-h-full flex-col pb-8">
@@ -50,16 +49,18 @@ export default function HalamanQuran({ onKembali, onSertifikat }: { onKembali: (
               key={s.nomor}
               onClick={() => {
                 pop()
-                setInfo(s.nama)
+                if (suratSiap(s.nomor)) onSurat(s.nomor)
+                else setInfo(s.nama)
               }}
               className="tombol animate-masuk flex flex-col items-center bg-white px-2 py-3"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="flex items-center gap-1 text-lg font-extrabold">
-                {!tersedia && <IkonGembok ukuran={18} />} {s.nama}
+                {!suratSiap(s.nomor) && <IkonGembok ukuran={18} />} {s.nama}
+                {(p.surat[s.nomor]?.length ?? 0) === s.jumlahAyat && ' ✅'}
               </div>
               <div className="text-xs font-bold text-slate-500">
-                {s.arti} · {s.jumlahAyat} ayat
+                {s.arti} · {suratSiap(s.nomor) ? `${p.surat[s.nomor]?.length ?? 0}/${s.jumlahAyat} ayat lancar` : `${s.jumlahAyat} ayat`}
               </div>
             </button>
           ))}

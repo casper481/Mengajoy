@@ -27,6 +27,8 @@ type Aksi = {
   tandaiTamat: () => void
   /** Simpan hasil latihan harian: kunci bacaan + jumlah salah di soal itu */
   catatLatihan: (hasil: { kunci: string; salah: number }[]) => void
+  /** Tandai satu ayat sudah lancar dibaca (dikonfirmasi orang tua) */
+  tandaiAyat: (surah: number, ayat: number) => void
   reset: () => void
   /** Alat uji coba (prototipe) untuk mencoba fitur yang bergantung waktu/progres */
   uji: (aksi: AksiUji) => void
@@ -128,6 +130,17 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
     },
     [tandaiBelajar],
   )
+  const tandaiAyat = useCallback(
+    (surah: number, ayat: number) => {
+      setP((s) => {
+        const lama = s.surat[surah] ?? []
+        if (lama.includes(ayat)) return s
+        return { ...s, surat: { ...s.surat, [surah]: [...lama, ayat].sort((a, b) => a - b) } }
+      })
+      tandaiBelajar()
+    },
+    [tandaiBelajar],
+  )
   const uji = useCallback((aksi: AksiUji) => {
     setP((s) => {
       const hi = hariIni()
@@ -201,6 +214,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       setDemo,
       reset,
       uji,
+      tandaiAyat,
       streakAktif,
       totalBintang,
       misiHariIniSelesai: p.misi.tanggal === hi,
@@ -208,7 +222,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       batasTercapai: detikHariIni >= p.batasMenit * 60,
       stageTerbuka,
     }
-  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, uji, reset])
+  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, uji, tandaiAyat, reset])
 
   return <Ctx.Provider value={nilai}>{children}</Ctx.Provider>
 }

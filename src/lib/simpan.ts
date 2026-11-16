@@ -23,6 +23,7 @@ export type Progres = {
   tamatDilihat: boolean // layar perayaan tamat sudah pernah tampil
   latihan: { tanggal: string | null; total: number } // latihan harian
   statistik: Record<string, { b: number; s: number }> // hasil latihan per bacaan: benar / salah
+  surat: Record<string, number[]> // nomor surat → daftar ayat yang sudah lancar dibaca
 }
 
 export const PROGRES_AWAL: Progres = {
@@ -40,6 +41,7 @@ export const PROGRES_AWAL: Progres = {
   tamatDilihat: false,
   latihan: { tanggal: null, total: 0 },
   statistik: {},
+  surat: {},
 }
 
 export function muat(): Progres {
@@ -55,6 +57,7 @@ export function muat(): Progres {
       waktu: { ...PROGRES_AWAL.waktu, ...data.waktu },
       latihan: { ...PROGRES_AWAL.latihan, ...data.latihan },
       statistik: { ...data.statistik },
+      surat: { ...data.surat },
     }
   } catch {
     return structuredClone(PROGRES_AWAL)
