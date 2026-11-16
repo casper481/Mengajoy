@@ -2,7 +2,7 @@
 
 @theme {
   --font-arab: "Scheherazade New", "Amiri", serif;
-  --font-sans: "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Baloo 2", "Scheherazade New", ui-rounded, system-ui, sans-serif;
 
   --color-langit: #bfe9ff;
   --color-laut: #6cc4ee;

@@ -2,8 +2,7 @@
 import { useState } from 'react'
 import BarAtas from '../components/BarAtas'
 import { HURUF } from '../data/huruf'
-import { HARAKAT } from '../data/harakat'
-import { STAGES } from '../data/stages'
+import { PULAU, STAGES, stagesOfPulau } from '../data/stages'
 import { useProgres } from '../lib/progres'
 import { formatMenit } from '../lib/tanggal'
 
@@ -12,7 +11,6 @@ export default function AreaOrtu({ onKembali }: { onKembali: () => void }) {
   const [konfirmasiReset, setKonfirmasiReset] = useState(false)
 
   const hurufDikuasai = new Set(STAGES.filter((s) => s.jenis === 'huruf' && (p.bintang[s.id] ?? 0) > 0).flatMap((s) => (s.jenis === 'huruf' ? s.huruf : [])))
-  const stageHarakat = STAGES.filter((s) => s.jenis === 'harakat')
   const sisa = Math.max(0, p.batasMenit * 60 - detikHariIni)
 
   return (
@@ -44,16 +42,35 @@ export default function AreaOrtu({ onKembali }: { onKembali: () => void }) {
           </div>
         </Bagian>
 
-        <Bagian judul="Harakat">
-          <div className="flex flex-col gap-1.5">
-            {stageHarakat.map((s) => (
-              <div key={s.id} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
-                <span className="font-bold">{s.jenis === 'harakat' ? s.judul : ''}</span>
-                <span className="font-bold text-slate-500">{p.bintang[s.id] ? `${'★'.repeat(p.bintang[s.id])} selesai` : 'belum'}</span>
-              </div>
-            ))}
+        <Bagian judul="Perjalanan menuju membaca Al-Quran">
+          <div className="flex flex-col gap-3">
+            {PULAU.filter((pl) => pl.id > 1).map((pl) => {
+              const stages = stagesOfPulau(pl.id)
+              const selesai = stages.filter((x) => (p.bintang[x.id] ?? 0) > 0).length
+              return (
+                <div key={pl.id}>
+                  <div className="flex items-center justify-between text-sm font-extrabold">
+                    <span>
+                      Level {pl.id}: {pl.nama.replace('Pulau ', '')}
+                    </span>
+                    <span className="text-slate-500">{stages.length ? `${selesai}/${stages.length}` : 'menunggu teks resmi'}</span>
+                  </div>
+                  {stages.length > 0 && (
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {stages.map((x) => (
+                        <span
+                          key={x.id}
+                          className={`rounded-lg px-2 py-0.5 text-xs font-bold ${(p.bintang[x.id] ?? 0) > 0 ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-400'}`}
+                        >
+                          {x.jenis === 'huruf' ? `Stage ${x.nomor}` : x.judul} {p.bintang[x.id] ? '★'.repeat(p.bintang[x.id]) : ''}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
-          <div className="mt-2 text-xs text-slate-500">Harakat: {HARAKAT.map((h) => h.nama).join(', ')}.</div>
         </Bagian>
 
         {/* Batas waktu */}

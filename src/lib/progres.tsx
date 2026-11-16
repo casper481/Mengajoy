@@ -29,6 +29,7 @@ type Aksi = {
   detikHariIni: number
   batasTercapai: boolean
   stageTerbuka: (stageId: string) => boolean
+  pulauTerbuka: (pulauId: number) => boolean
 }
 
 const Ctx = createContext<Aksi | null>(null)
@@ -55,14 +56,17 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
   const selesaiStage = useCallback(
     (stageId: string, bintang: number) => {
       const stage = stageById(stageId)
-      const hadiahBaru = p.hadiah.includes(stage.hadiah) ? null : stage.hadiah
+      const hadiahStage = stage.hadiah
+      const hadiahBaru = hadiahStage && !p.hadiah.includes(hadiahStage) ? hadiahStage : null
       setP((s) => {
         const lama = s.bintang[stageId] ?? 0
-        const hadiah = s.hadiah.includes(stage.hadiah) ? s.hadiah : [...s.hadiah, stage.hadiah]
+        const hadiah = hadiahBaru && !s.hadiah.includes(hadiahBaru) ? [...s.hadiah, hadiahBaru] : s.hadiah
         // otomatis pakaikan hadiah baru kalau slotnya masih kosong
         const dipakai = { ...s.dipakai }
-        const slot = hadiahById(stage.hadiah).slot
-        if (hadiahBaru && !dipakai[slot]) dipakai[slot] = stage.hadiah
+        if (hadiahBaru) {
+          const slot = hadiahById(hadiahBaru).slot
+          if (!dipakai[slot]) dipakai[slot] = hadiahBaru
+        }
         return { ...s, bintang: { ...s.bintang, [stageId]: Math.max(lama, bintang) }, hadiah, dipakai }
       })
       tandaiBelajar()
@@ -116,8 +120,11 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       const sebelum = STAGES.find((x) => x.pulau === s.pulau && x.nomor === s.nomor - 1)!
       return (p.bintang[sebelum.id] ?? 0) > 0
     }
+    const pulauSelesai = (id: number) => STAGES.filter((x) => x.pulau === id).every((x) => (p.bintang[x.id] ?? 0) > 0)
+    const pulauTerbuka = (id: number) => p.modeDemo || id === 1 || pulauSelesai(id - 1)
     return {
       p,
+      pulauTerbuka,
       mulai,
       selesaiStage,
       tandaiBelajar,

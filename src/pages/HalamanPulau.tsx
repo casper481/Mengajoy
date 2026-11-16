@@ -58,7 +58,7 @@ export default function HalamanPulau({ pulauId, onStage, onKembali }: { pulauId:
               >
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-tinta px-2.5 text-sm font-extrabold text-white">{s.nomor}</span>
                 {buka ? (
-                  <span className={`${s.jenis === 'huruf' ? 'arab text-[1.7rem]' : 'text-xl font-extrabold'} whitespace-nowrap leading-none`}>{labelStage(s)}</span>
+                  <span className={`${s.jenis === 'huruf' ? 'arab text-[1.7rem] whitespace-nowrap' : s.judul.length > 12 ? 'px-1 text-sm font-extrabold' : 'text-lg font-extrabold'} leading-tight`}>{labelStage(s)}</span>
                 ) : (
                   <IkonGembok ukuran={34} />
                 )}

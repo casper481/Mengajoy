@@ -1,10 +1,11 @@
 /** Aktivitas 1: "Kenalan" — huruf besar, nama latin, tombol suara, animasi masuk. */
 import { useState } from 'react'
 import NuriBicara from '../components/NuriBicara'
+import TeksCampur from '../components/TeksCampur'
 import TombolSuara from '../components/TombolSuara'
 import { HARAKAT, harakatById, type HarakatId } from '../data/harakat'
 import { pop } from '../lib/efekSuara'
-import type { Item } from './tipe'
+import { ukuranArab, type Item } from './tipe'
 
 type Props = {
   items: Item[]
@@ -56,17 +57,27 @@ export default function Kenalan({ items, harakat, onSelesai }: Props) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="shrink-0 px-4">
-        <NuriBicara ukuran={64} teks={idx === 0 ? 'Ayo kenalan! Ketuk speaker untuk mendengar.' : 'Ini dia teman baru kita!'} ekspresi="senang" />
+        <NuriBicara ukuran={64} teks={!item.audio ? 'Ayo kenalan! Baca penjelasannya bersama Ayah atau Bunda, ya.' : idx === 0 ? 'Ayo kenalan! Ketuk speaker untuk mendengar.' : 'Ini dia teman baru kita!'} ekspresi="senang" />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center-safe gap-3 overflow-y-auto px-4">
-        <div key={item.id} className="animate-putar-masuk flex aspect-square w-[min(12rem,26dvh)] shrink-0 items-center justify-center rounded-[2.5rem] bg-white shadow-xl">
-          <span className="arab text-[min(7rem,15dvh)] leading-none text-tinta">{item.arab}</span>
+        <div
+          key={item.id}
+          className={`animate-putar-masuk flex shrink-0 items-center justify-center rounded-[2.5rem] bg-white px-4 shadow-xl ${
+            item.arab.length <= 2 ? 'aspect-square w-[min(12rem,26dvh)]' : 'min-h-[min(10rem,22dvh)] w-full max-w-xs py-4'
+          }`}
+        >
+          <span className={`arab ${ukuranArab(item.arab)} text-center leading-tight text-tinta`}>{item.arab}</span>
         </div>
-        <div key={item.id + 'n'} className="animate-masuk text-4xl font-extrabold text-tinta" style={{ animationDelay: '0.3s' }}>
+        <div key={item.id + 'n'} className={`animate-masuk text-center font-extrabold text-tinta ${item.latin.length > 10 ? 'text-3xl' : 'text-4xl'}`} style={{ animationDelay: '0.3s' }}>
           {item.latin}
         </div>
-        <TombolSuara key={item.audio} src={item.audio} besar otomatis />
+        {item.keterangan && (
+          <div key={item.id + 'k'} className="animate-muncul rounded-2xl bg-white/80 px-4 py-2 text-center text-lg font-bold leading-snug" style={{ animationDelay: '0.5s' }}>
+            <TeksCampur teks={item.keterangan} />
+          </div>
+        )}
+        {item.audio && <TombolSuara key={item.audio} src={item.audio} besar otomatis />}
 
         {item.bentuk && (
           <div className="animate-muncul w-full rounded-2xl bg-white/70 px-3 py-2" style={{ animationDelay: '0.6s' }}>

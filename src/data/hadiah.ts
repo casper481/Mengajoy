@@ -19,6 +19,12 @@ export const HADIAH: Hadiah[] = [
   { id: 'kacamata-hitam', nama: 'Kacamata Keren', slot: 'mata' },
   { id: 'topi-bintang', nama: 'Topi Bintang', slot: 'kepala' },
   { id: 'lencana', nama: 'Lencana Juara', slot: 'dada' },
+  { id: 'kalung-bunga', nama: 'Kalung Bunga', slot: 'leher' },
+  { id: 'tas-buku', nama: 'Tas Buku', slot: 'punggung' },
+  { id: 'kacamata-bintang', nama: 'Kacamata Bintang', slot: 'mata' },
+  { id: 'medali', nama: 'Medali Emas', slot: 'dada' },
+  { id: 'mahkota-emas', nama: 'Mahkota Emas', slot: 'kepala' },
+  { id: 'topi-wisuda', nama: 'Topi Wisuda', slot: 'kepala' },
 ]
 
 export const hadiahById = (id: string) => HADIAH.find((h) => h.id === id)!

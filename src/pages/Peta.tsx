@@ -18,7 +18,7 @@ const POSISI_X = [26, 72, 30, 70, 28, 70]
 const JARAK = 170
 
 export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
-  const { p, misiHariIniSelesai, stageTerbuka } = useProgres()
+  const { p, misiHariIniSelesai, pulauTerbuka } = useProgres()
   const tinggi = PULAU.length * JARAK + 140
 
   // titik-titik jalur untuk garis putus-putus
@@ -33,7 +33,7 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
     .join(' ')
 
   // pulau yang sedang aktif (tempat Nuri berdiri)
-  const pulauAktif = stageTerbuka('k1') ? 2 : 1
+  const pulauAktif = [...PULAU].reverse().find((x) => pulauTerbuka(x.id))?.id ?? 1
 
   return (
     <div className="flex min-h-full flex-col">
@@ -49,7 +49,7 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
           const stages = stagesOfPulau(pl.id)
           const bintang = stages.reduce((a, s) => a + (p.bintang[s.id] ?? 0), 0)
           const maks = stages.length * 3
-          const terbuka = pl.tersedia && (pl.id === 1 || stageTerbuka(stages[0].id))
+          const terbuka = pl.tersedia && pulauTerbuka(pl.id)
           return (
             <div
               key={pl.id}
@@ -58,12 +58,12 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
             >
               <button
                 onClick={() => {
-                  if (!pl.tersedia) return
+                  if (!terbuka) return
                   pop()
                   onPulau(pl.id)
                 }}
-                disabled={!pl.tersedia}
-                className={`relative flex h-32 w-40 flex-col items-center justify-center ${pl.tersedia ? '' : 'grayscale-[70%]'}`}
+                disabled={!terbuka}
+                className={`relative flex h-32 w-40 flex-col items-center justify-center ${terbuka ? '' : 'grayscale-[70%]'} ${pl.id === 6 && terbuka ? 'drop-shadow-[0_0_16px_#ffd166]' : ''}`}
                 aria-label={pl.nama}
               >
                 {/* bentuk pulau */}
@@ -74,8 +74,8 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
                   <circle cx="34" cy="62" r="7" fill="#fff" opacity="0.35" />
                 </svg>
                 <span className="relative">
-                  {pl.tersedia ? (
-                    <span className="arab block text-4xl font-bold text-tinta">{pl.ikon}</span>
+                  {terbuka ? (
+                    <span className={`arab block font-bold text-tinta ${pl.ikon.length > 6 ? 'text-3xl' : 'text-4xl'}`}>{pl.ikon}</span>
                   ) : (
                     <IkonGembok ukuran={40} />
                   )}
@@ -90,12 +90,14 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
                 {pl.nama}
                 {pl.tersedia ? (
                   <div className="flex items-center justify-center gap-1 text-xs text-slate-500">
-                    {terbuka ? (
+                    {!terbuka ? (
+                      'Selesaikan pulau sebelumnya'
+                    ) : maks === 0 ? (
+                      'Tujuan akhir kita!'
+                    ) : (
                       <>
                         <IkonBintang ukuran={14} /> {bintang}/{maks}
                       </>
-                    ) : (
-                      'Selesaikan pulau sebelumnya'
                     )}
                   </div>
                 ) : (

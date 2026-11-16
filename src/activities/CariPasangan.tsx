@@ -6,11 +6,11 @@ import type { Ekspresi } from '../components/Nuri'
 import { putar } from '../lib/audio'
 import { pop, sorak, ting } from '../lib/efekSuara'
 import { acak } from '../lib/tanggal'
-import { pujianAcak, type Item } from './tipe'
+import { pujianAcak, ukuranArab, type Item } from './tipe'
 
 type Kartu = { kunci: string; id: string; jenis: 'arab' | 'latin'; item: Item }
 
-export default function CariPasangan({ items, onSelesai }: { items: Item[]; onSelesai: (salah: number) => void }) {
+export default function CariPasangan({ items, onSelesai, pesanAwal = 'Balik dua kartu. Cocokkan huruf dengan namanya!' }: { items: Item[]; onSelesai: (salah: number) => void; pesanAwal?: string }) {
   const kartu = useMemo<Kartu[]>(() => {
     const dipakai = acak(items).slice(0, 4)
     return acak(
@@ -27,14 +27,14 @@ export default function CariPasangan({ items, onSelesai }: { items: Item[]; onSe
   const [kunci, setKunci] = useState(false)
   const [ledak, setLedak] = useState(0)
   const [pesan, setPesan] = useState<{ teks: string; ekspresi: Ekspresi }>({
-    teks: 'Balik dua kartu. Cocokkan huruf dengan namanya!',
+    teks: pesanAwal,
     ekspresi: 'biasa',
   })
 
   const tekan = (k: Kartu) => {
     if (kunci || terbuka.includes(k.kunci) || cocok.includes(k.id)) return
     pop()
-    if (k.jenis === 'arab') void putar(k.item.audio)
+    if (k.jenis === 'arab' && k.item.audio) void putar(k.item.audio)
     const baru = [...terbuka, k.kunci]
     setTerbuka(baru)
     if (baru.length < 2) return
@@ -88,9 +88,9 @@ export default function CariPasangan({ items, onSelesai }: { items: Item[]; onSe
                   </div>
                   <div className={`kartu-muka border-4 bg-white shadow-[0_5px_0_rgba(0,0,0,0.12)] ${sudahCocok ? 'border-daun' : 'border-white'}`}>
                     {k.jenis === 'arab' ? (
-                      <span className="arab text-5xl leading-none">{k.item.arab}</span>
+                      <span className={`arab ${ukuranArab(k.item.arab, 'kecil')} px-1 text-center leading-tight`}>{k.item.arab}</span>
                     ) : (
-                      <span className="text-lg font-extrabold">{k.item.latin}</span>
+                      <span className={`px-1 text-center font-extrabold leading-tight ${k.item.latin.length > 9 ? 'text-xs' : 'text-lg'}`}>{k.item.latin}</span>
                     )}
                   </div>
                 </div>

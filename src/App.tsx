@@ -7,6 +7,8 @@ import { useProgres } from './lib/progres'
 import AreaOrtu from './pages/AreaOrtu'
 import GerbangOrtu from './pages/GerbangOrtu'
 import HalamanPulau from './pages/HalamanPulau'
+import HalamanQuran from './pages/HalamanQuran'
+import { stageById } from './data/stages'
 import HalamanStage from './pages/HalamanStage'
 import Istirahat from './pages/Istirahat'
 import Lemari from './pages/Lemari'
@@ -72,10 +74,10 @@ export default function App() {
         )
         break
       case 'pulau':
-        isi = <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
+        isi = layar.id === 6 ? <HalamanQuran onKembali={() => ke({ nama: 'peta' })} /> : <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
         break
       case 'stage': {
-        const pulau = layar.id.startsWith('h') ? 1 : 2
+        const pulau = stageById(layar.id).pulau
         isi = (
           <HalamanStage
             key={layar.id + layar.ulang}

@@ -71,8 +71,47 @@ Rekam bersama ustaz, lalu simpan dengan **nama file persis seperti di tabel**.
 | 19 | كَ | `kaf-fathah.mp3` | **ka** | Fathah | ☐ |
 | 20 | كِ | `kaf-kasrah.mp3` | **ki** | Kasrah | ☐ |
 | 21 | كُ | `kaf-dhammah.mp3` | **ku** | Dhammah | ☐ |
+## C. Level 3–4 (kata latihan) — folder `public/audio/lanjutan/` (32 file)
 
-**Total: 49 file audio.**
+| No | Level | Materi | Tulisan | Nama file | Dibaca | ✓ |
+|---|---|---|---|---|---|---|
+| 1 | Level 3 | Sambung Fathah | كَتَبَ | `kataba.mp3` | **ka-ta-ba** | ☐ |
+| 2 | Level 3 | Sambung Fathah | جَلَسَ | `jalasa.mp3` | **ja-la-sa** | ☐ |
+| 3 | Level 3 | Sambung Fathah | ذَهَبَ | `dzahaba.mp3` | **dza-ha-ba** | ☐ |
+| 4 | Level 3 | Sambung Fathah | فَتَحَ | `fataha.mp3` | **fa-ta-ḥa** | ☐ |
+| 5 | Level 3 | Sambung Kasrah & Dhammah | سَمِعَ | `samia.mp3` | **sa-mi-'a** | ☐ |
+| 6 | Level 3 | Sambung Kasrah & Dhammah | عَلِمَ | `alima.mp3` | **'a-li-ma** | ☐ |
+| 7 | Level 3 | Sambung Kasrah & Dhammah | حَسُنَ | `hasuna.mp3` | **ḥa-su-na** | ☐ |
+| 8 | Level 3 | Sambung Kasrah & Dhammah | كَبُرَ | `kabura.mp3` | **ka-bu-ro** | ☐ |
+| 9 | Level 3 | Tanwin | بًا | `ban.mp3` | **ban** | ☐ |
+| 10 | Level 3 | Tanwin | بٍ | `bin.mp3` | **bin** | ☐ |
+| 11 | Level 3 | Tanwin | بٌ | `bun.mp3` | **bun** | ☐ |
+| 12 | Level 3 | Tanwin | وَلَدٌ | `waladun.mp3` | **wa-la-dun** | ☐ |
+| 13 | Level 3 | Sukun | اَبْ | `ab.mp3` | **ab** | ☐ |
+| 14 | Level 3 | Sukun | اِبْ | `ib.mp3` | **ib** | ☐ |
+| 15 | Level 3 | Sukun | اُبْ | `ub.mp3` | **ub** | ☐ |
+| 16 | Level 3 | Sukun | مِنْ | `min.mp3` | **min** | ☐ |
+| 17 | Level 4 | Mad Alif | بَا | `baa.mp3` | **baa** | ☐ |
+| 18 | Level 4 | Mad Alif | تَا | `taa.mp3` | **taa** | ☐ |
+| 19 | Level 4 | Mad Alif | نَامَ | `naama.mp3` | **naa-ma** | ☐ |
+| 20 | Level 4 | Mad Alif | قَالَ | `qoola.mp3` | **qoo-la** | ☐ |
+| 21 | Level 4 | Mad Ya | بِيْ | `bii.mp3` | **bii** | ☐ |
+| 22 | Level 4 | Mad Ya | فِيْ | `fii.mp3` | **fii** | ☐ |
+| 23 | Level 4 | Mad Ya | دِيْنٌ | `diinun.mp3` | **dii-nun** | ☐ |
+| 24 | Level 4 | Mad Ya | قِيْلَ | `qiila.mp3` | **qii-la** | ☐ |
+| 25 | Level 4 | Mad Wau | بُوْ | `buu.mp3` | **buu** | ☐ |
+| 26 | Level 4 | Mad Wau | نُوْرٌ | `nuurun.mp3` | **nuu-run** | ☐ |
+| 27 | Level 4 | Mad Wau | يَقُوْلُ | `yaquulu.mp3` | **ya-quu-lu** | ☐ |
+| 28 | Level 4 | Mad Wau | يَكُوْنُ | `yakuunu.mp3` | **ya-kuu-nu** | ☐ |
+| 29 | Level 4 | Tasydid | رَبَّ | `robba.mp3` | **rob-ba** | ☐ |
+| 30 | Level 4 | Tasydid | اِنَّ | `inna.mp3` | **in-na** | ☐ |
+| 31 | Level 4 | Tasydid | ثُمَّ | `tsumma.mp3` | **tsum-ma** | ☐ |
+| 32 | Level 4 | Tasydid | مَدَّ | `madda.mp3` | **mad-da** | ☐ |
+
+> Level 5 (tajwid dasar) belum memakai audio: anak belajar mengenali hukum bacaan dari tulisan. Level 6 (ayat) menunggu teks resmi dan audio qari berizin.
+
+
+**Total: 81 file audio.**
 
 ## Yang TIDAK perlu direkam
 

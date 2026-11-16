@@ -3,7 +3,18 @@
 > "Anak belajar agama karena seru, bukan karena disuruh."
 
 Mengajoy adalah web app belajar membaca Al-Quran untuk anak usia 5–10 tahun, bersama **Nuri**, burung kecil pemandu.
-Prototipe ini berisi **Level 1 (Huruf Hijaiyah)** dan **Level 2 (Harakat)**. Level 3–6 sudah tampil di peta sebagai pulau terkunci dengan tulisan "Segera hadir".
+Prototipe ini berisi 6 pulau mengikuti urutan TPQ:
+
+| Level | Pulau | Isi | Status |
+|---|---|---|---|
+| 1 | Huruf Hijaiyah | 28 huruf dalam 7 stage | ✅ Bisa dimainkan |
+| 2 | Harakat | Fathah, kasrah, dhammah (4 stage) | ✅ Bisa dimainkan |
+| 3 | Menyambung Huruf | Sambung fathah, sambung kasrah/dhammah, tanwin, sukun | ✅ Bisa dimainkan |
+| 4 | Mad & Tasydid | Mad alif, mad ya, mad wau, tasydid | ✅ Bisa dimainkan |
+| 5 | Tajwid Dasar | Izhar/idgham, iqlab/ikhfa, mim mati, qalqalah/ghunnah | ✅ Bisa dimainkan |
+| 6 | Al-Quran | Daftar surat rencana | ⏳ Menunggu teks Mushaf Standar Indonesia (tashih LPMQ) |
+
+Setiap pulau terbuka setelah pulau sebelumnya selesai.
 
 ---
 
@@ -49,7 +60,9 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 | Misi harian | Tombol **Misi Hari Ini** → **Sudah!** → dikonfirmasi orang tua |
 | Area orang tua | Tombol **Orang Tua** → jawab soal perkalian → lihat progres dan atur batas waktu |
 | Batas waktu | Pilih 15/30/45 menit. Saat tercapai, muncul layar "Waktunya istirahat" sampai besok |
-| **Mode coba** | Di Area Orang Tua, nyalakan "Mode coba: buka semua stage" untuk langsung mencoba Pulau 2 atau memeriksa materi bersama ustaz |
+| Level 3–5 | Kenalan → Latihan (pilihan ganda: cara baca, pendek/panjang, hukum tajwid) → Cari Pasangan |
+| Level 6 | Pulau Al-Quran: perayaan + daftar surat yang akan datang + penjelasan untuk orang tua |
+| **Mode coba** | Di Area Orang Tua, nyalakan "Mode coba: buka semua stage" untuk langsung mencoba semua pulau atau memeriksa materi bersama ustaz |
 
 ---
 
@@ -60,27 +73,30 @@ mengajoy/
 ├── public/
 │   └── audio/
 │       ├── huruf/        ← tempat file audio huruf (alif.mp3, ba.mp3, …)
-│       └── harakat/      ← tempat file audio harakat (ba-fathah.mp3, …)
+│       ├── harakat/      ← tempat file audio harakat (ba-fathah.mp3, …)
+│       └── lanjutan/     ← tempat file audio Level 3–4 (kataba.mp3, …)
 ├── src/
 │   ├── data/             ← ★ ISI MATERI (bisa diperiksa ustaz tanpa paham kode)
 │   │   ├── huruf.ts      ← 28 huruf: urutan, nama latin, bentuk awal/tengah/akhir, petunjuk
 │   │   ├── harakat.ts    ← fathah/kasrah/dhammah + daftar suku kata
+│   │   ├── materi-lanjutan.ts ← ★ materi Level 3–5 (kata latihan & hukum tajwid)
+│   │   ├── ayat.ts       ← Level 6: rencana surat (teks ayat SENGAJA masih kosong)
 │   │   ├── stages.ts     ← pembagian pulau & stage
 │   │   ├── hadiah.ts     ← daftar aksesoris Nuri
 │   │   └── misi.ts       ← daftar misi harian
-│   ├── activities/       ← 4 permainan: Kenalan, TebakSuara, CariPasangan, SusunSukuKata
+│   ├── activities/       ← permainan: Kenalan, TebakSuara, PilihJawaban, CariPasangan, SusunSukuKata
 │   ├── pages/            ← halaman: Sambutan, Peta, Pulau, Stage, Lemari, Misi, Orang Tua, Istirahat
 │   ├── components/       ← potongan tampilan: Nuri (SVG), tombol suara, bar atas, efek bintang
 │   ├── lib/              ← penyimpanan progres, efek suara, pemutar audio, tanggal
 │   └── App.tsx           ← pengatur halaman + penghitung waktu belajar
-├── AUDIO-TODO.md         ← daftar 49 file audio yang perlu direkam
+├── AUDIO-TODO.md         ← daftar 81 file audio yang perlu direkam
 └── README.md             ← dokumen ini
 ```
 
 ## Cara menambahkan audio
 
 1. Rekam sesuai daftar di **AUDIO-TODO.md**.
-2. Simpan file MP3 ke `public/audio/huruf/` atau `public/audio/harakat/` dengan nama **persis** seperti di daftar.
+2. Simpan file MP3 ke `public/audio/huruf/`, `public/audio/harakat/`, atau `public/audio/lanjutan/` dengan nama **persis** seperti di daftar.
 3. Muat ulang app. Tulisan "audio belum tersedia" akan hilang dan suara akan diputar.
 
 ## Catatan teknis singkat
@@ -93,7 +109,7 @@ mengajoy/
 
 ## Aturan konten yang dipatuhi
 
-- Hanya huruf hijaiyah dan harakat, **tanpa teks ayat Al-Quran**. Nanti teks ayat wajib memakai Mushaf Standar Indonesia yang ditashih LPMQ Kemenag.
+- **Tanpa teks ayat Al-Quran.** Level 3–5 memakai kata latihan, bukan potongan ayat. Teks ayat (Level 6) wajib memakai Mushaf Standar Indonesia yang ditashih LPMQ Kemenag.
 - Tidak ada gambar atau visualisasi nabi, rasul, maupun keluarganya. Satu-satunya tokoh adalah Nuri, burung ciptaan sendiri.
 - Tidak ada iklan, tautan keluar, atau pembelian di dalam app.
 - Tidak ada hitung mundur yang memaksa dan tidak ada notifikasi. Ada batas waktu harian yang diatur orang tua.
@@ -102,14 +118,12 @@ mengajoy/
 
 ## Yang belum dibuat (daftar pekerjaan berikutnya)
 
-- [ ] **File audio**: 49 file belum direkam (lihat AUDIO-TODO.md).
-- [ ] **Pemeriksaan ustaz** atas `src/data/huruf.ts` dan `src/data/harakat.ts` (nama latin, petunjuk, bentuk sambung).
+- [ ] **File audio**: 81 file belum direkam (lihat AUDIO-TODO.md).
+- [ ] **Pemeriksaan ustaz** atas `src/data/huruf.ts`, `src/data/harakat.ts`, dan `src/data/materi-lanjutan.ts` (nama latin, petunjuk, contoh, penjelasan tajwid).
 - [ ] Hamzah (ء) dan lam-alif (لا), jika TPQ Anda memasukkannya.
-- [ ] Level 3: Menyambung huruf.
-- [ ] Level 4: Mad (bacaan panjang).
-- [ ] Level 5: Tajwid dasar.
-- [ ] Level 6: Membaca ayat (wajib teks Mushaf Standar Indonesia yang ditashih LPMQ).
-- [ ] Tanwin, sukun, dan tasydid.
+- [ ] **Level 6: isi teks ayat** dari Mushaf Standar Indonesia (tashih LPMQ) + audio qari berizin, lalu buat tampilan baca per kata. Urus izin/tashih ke LPMQ Kemenag.
+- [ ] Materi lanjutan yang belum ada: mad lainnya (mad wajib/jaiz, dll.), hukum lam jalalah, ra tafkhim/tarqiq, waqaf.
+- [ ] Perayaan tamat + Latihan Harian (mengulang materi yang sudah dipelajari).
 - [ ] Akun & sinkron antar-perangkat (sekarang progres hanya tersimpan di satu browser).
 - [ ] Beberapa profil anak dalam satu perangkat.
 - [ ] Laporan mingguan untuk orang tua.

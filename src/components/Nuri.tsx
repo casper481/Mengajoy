@@ -30,6 +30,14 @@ export default function Nuri({ ukuran = 160, ekspresi = 'biasa', dipakai = {}, c
           <rect x="140" y="116" width="28" height="18" rx="6" fill="#ffb199" />
         </g>
       )}
+      {dipakai.punggung === 'tas-buku' && (
+        <g>
+          <rect x="130" y="92" width="48" height="62" rx="10" fill="#5cc96b" />
+          <rect x="138" y="84" width="16" height="30" rx="2" fill="#ffd166" transform="rotate(-8 146 99)" />
+          <rect x="154" y="86" width="14" height="28" rx="2" fill="#ef476f" transform="rotate(6 161 100)" />
+          <rect x="136" y="122" width="36" height="14" rx="5" fill="#3fae4f" />
+        </g>
+      )}
 
       {/* Kaki */}
       <g stroke={PARUH} strokeWidth="6" strokeLinecap="round">
@@ -96,8 +104,15 @@ export default function Nuri({ ukuran = 160, ekspresi = 'biasa', dipakai = {}, c
       <Kepala id={dipakai.kepala} />
       <Mata id={dipakai.mata} />
       <Leher id={dipakai.leher} />
-      {dipakai.punggung === 'ransel' && (
-        <path d="M140 102 Q120 130 128 160" stroke="#d9573a" strokeWidth="6" fill="none" strokeLinecap="round" />
+      {dipakai.punggung && (
+        <path d="M140 102 Q120 130 128 160" stroke={dipakai.punggung === 'ransel' ? '#d9573a' : '#3fae4f'} strokeWidth="6" fill="none" strokeLinecap="round" />
+      )}
+      {dipakai.dada === 'medali' && (
+        <g>
+          <path d="M70 128 L76 146 L82 128" stroke="#4cb8e8" strokeWidth="5" fill="none" />
+          <circle cx="76" cy="152" r="11" fill="#ffc93c" stroke="#e0a400" strokeWidth="3" />
+          <text x="76" y="157" textAnchor="middle" fontSize="13" fontWeight="800" fill="#b07800">1</text>
+        </g>
       )}
       {dipakai.dada === 'lencana' && (
         <g>
@@ -147,6 +162,24 @@ function Kepala({ id }: { id?: string }) {
           <rect x="72" y="58" width="56" height="9" rx="4" fill="#7b6be0" />
         </g>
       )
+    case 'mahkota-emas':
+      return (
+        <g>
+          <path d="M68 66 L72 34 L86 50 L100 28 L114 50 L128 34 L132 66 Z" fill="#ffc93c" stroke="#e0a400" strokeWidth="3" strokeLinejoin="round" />
+          <circle cx="100" cy="52" r="5" fill="#ef476f" />
+          <circle cx="82" cy="58" r="4" fill="#4cb8e8" />
+          <circle cx="118" cy="58" r="4" fill="#5cc96b" />
+        </g>
+      )
+    case 'topi-wisuda':
+      return (
+        <g>
+          <path d="M74 52 L74 68 Q100 76 126 68 L126 52 Z" fill="#2b2b3a" />
+          <path d="M100 30 L150 46 L100 62 L50 46 Z" fill="#33334a" />
+          <path d="M140 49 L140 74" stroke="#ffc93c" strokeWidth="3" />
+          <circle cx="140" cy="77" r="5" fill="#ffc93c" />
+        </g>
+      )
     default:
       return null
   }
@@ -171,6 +204,13 @@ function Mata({ id }: { id?: string }) {
         <path d="M110 90 L120 90" stroke="#fff" strokeWidth="3" opacity="0.6" />
       </g>
     )
+  if (id === 'kacamata-bintang')
+    return (
+      <g fill="#ff8fab" stroke="#e85d8a" strokeWidth="2.5" strokeLinejoin="round">
+        <path d="M78 74 L84 88 L99 89 L87 98 L91 113 L78 104 L65 113 L69 98 L57 89 L72 88 Z" opacity="0.85" />
+        <path d="M122 74 L128 88 L143 89 L131 98 L135 113 L122 104 L109 113 L113 98 L101 89 L116 88 Z" opacity="0.85" />
+      </g>
+    )
   return null
 }
 
@@ -189,6 +229,20 @@ function Leher({ id }: { id?: string }) {
         <path d="M50 134 Q100 154 150 134 L150 140 Q100 160 50 140 Z" fill="#ffd166" />
         <path d="M50 140 Q100 160 150 140 L150 146 Q100 166 50 146 Z" fill="#4cb8e8" />
         <path d="M116 150 L122 180 L108 178 L106 152 Z" fill="#9b8cf2" />
+      </g>
+    )
+  if (id === 'kalung-bunga')
+    return (
+      <g>
+        {[54, 68, 84, 100, 116, 132, 146].map((x, i) => {
+          const y = 132 + Math.sin((i / 6) * Math.PI) * 14
+          return (
+            <g key={x}>
+              <circle cx={x} cy={y} r="8" fill={['#ff8fab', '#ffd166', '#c8b6ff', '#ff8fab', '#ffd166', '#c8b6ff', '#ff8fab'][i]} />
+              <circle cx={x} cy={y} r="3" fill="#fff" />
+            </g>
+          )
+        })}
       </g>
     )
   if (id === 'dasi-kupu')
