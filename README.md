@@ -62,6 +62,9 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 | Batas waktu | Pilih 15/30/45 menit. Saat tercapai, muncul layar "Waktunya istirahat" sampai besok |
 | Level 3–5 | Kenalan → Latihan (pilihan ganda: cara baca, pendek/panjang, hukum tajwid) → Cari Pasangan |
 | Level 6 | Pulau Al-Quran: perayaan + daftar surat yang akan datang + penjelasan untuk orang tua |
+| **Latihan Harian** | Kartu di atas peta (muncul setelah 1 stage selesai): 6 soal acak dari bacaan yang sudah dipelajari. Bacaan yang sering salah lebih sering muncul |
+| **Perayaan tamat** | Setelah semua stage Level 1–5 selesai: tombol "🎓 Ada kejutan!" → Nuri wisuda + **sertifikat** bernama anak yang bisa diunduh (PNG) |
+| Perlu diulang | Di Area Orang Tua: daftar bacaan yang sering salah di Latihan Harian |
 | **Mode coba** | Di Area Orang Tua, nyalakan "Mode coba: buka semua stage" untuk langsung mencoba semua pulau atau memeriksa materi bersama ustaz |
 
 ---
@@ -123,7 +126,6 @@ mengajoy/
 - [ ] Hamzah (ء) dan lam-alif (لا), jika TPQ Anda memasukkannya.
 - [ ] **Level 6: isi teks ayat** dari Mushaf Standar Indonesia (tashih LPMQ) + audio qari berizin, lalu buat tampilan baca per kata. Urus izin/tashih ke LPMQ Kemenag.
 - [ ] Materi lanjutan yang belum ada: mad lainnya (mad wajib/jaiz, dll.), hukum lam jalalah, ra tafkhim/tarqiq, waqaf.
-- [ ] Perayaan tamat + Latihan Harian (mengulang materi yang sudah dipelajari).
 - [ ] Akun & sinkron antar-perangkat (sekarang progres hanya tersimpan di satu browser).
 - [ ] Beberapa profil anak dalam satu perangkat.
 - [ ] Laporan mingguan untuk orang tua.

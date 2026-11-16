@@ -9,23 +9,23 @@ import { hitungBintang, itemsDariStage, itemsPasangan, soalDariStage } from '../
 import { BarisBintang, Konfeti } from '../components/Efek'
 import Nuri from '../components/Nuri'
 import { hadiahById } from '../data/hadiah'
-import { stageById, stagesOfPulau } from '../data/stages'
+import { STAGES, stageById, stagesOfPulau } from '../data/stages'
 import { perayaan } from '../lib/efekSuara'
 import { useProgres } from '../lib/progres'
 
-type Props = { stageId: string; onKembali: () => void; onUlang: () => void }
+type Props = { stageId: string; onKembali: () => void; onUlang: () => void; onTamat: () => void }
 
-export default function HalamanStage({ stageId, onKembali, onUlang }: Props) {
+export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: Props) {
   const stage = stageById(stageId)
   const items = useMemo(() => itemsDariStage(stage), [stage])
   const soal = useMemo(() => (stage.jenis === 'umum' ? soalDariStage(stage) : []), [stage])
   const pasangan = useMemo(() => (stage.jenis === 'umum' ? itemsPasangan(stage) : items), [stage, items])
   const pulauSelesai = stage.nomor === stagesOfPulau(stage.pulau).length
-  const { selesaiStage, tandaiBelajar } = useProgres()
+  const { p, selesaiStage, tandaiBelajar } = useProgres()
 
   const [langkah, setLangkah] = useState(0)
   const [salah, setSalah] = useState(0)
-  const [hasil, setHasil] = useState<{ bintang: number; hadiah: string | null } | null>(null)
+  const [hasil, setHasil] = useState<{ bintang: number; hadiah: string | null; tamat: boolean } | null>(null)
 
   const namaAktivitas = [
     'Kenalan',
@@ -42,13 +42,14 @@ export default function HalamanStage({ stageId, onKembali, onUlang }: Props) {
       return
     }
     const bintang = hitungBintang(total)
+    const tamat = !p.tamatDilihat && STAGES.every((x) => x.id === stageId || (p.bintang[x.id] ?? 0) > 0)
     const hadiah = selesaiStage(stageId, bintang)
-    setHasil({ bintang, hadiah })
+    setHasil({ bintang, hadiah, tamat })
     setLangkah(3)
     setTimeout(perayaan, 200)
   }
 
-  if (langkah === 3 && hasil) return <Perayaan bintang={hasil.bintang} hadiahId={hasil.hadiah} pulauSelesai={pulauSelesai} onLanjut={onKembali} onUlang={onUlang} />
+  if (langkah === 3 && hasil) return <Perayaan bintang={hasil.bintang} hadiahId={hasil.hadiah} pulauSelesai={pulauSelesai} onLanjut={hasil.tamat ? onTamat : onKembali} tamat={hasil.tamat} onUlang={onUlang} />
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden">
@@ -76,7 +77,7 @@ export default function HalamanStage({ stageId, onKembali, onUlang }: Props) {
   )
 }
 
-function Perayaan({ bintang, hadiahId, pulauSelesai, onLanjut, onUlang }: { bintang: number; hadiahId: string | null; pulauSelesai: boolean; onLanjut: () => void; onUlang: () => void }) {
+function Perayaan({ bintang, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }: { bintang: number; hadiahId: string | null; pulauSelesai: boolean; tamat: boolean; onLanjut: () => void; onUlang: () => void }) {
   const { p } = useProgres()
   const hadiah = hadiahId ? hadiahById(hadiahId) : null
   // tampilkan Nuri memakai hadiah barunya
@@ -106,7 +107,7 @@ function Perayaan({ bintang, hadiahId, pulauSelesai, onLanjut, onUlang }: { bint
       </div>
 
       <div className="flex w-full max-w-sm flex-col gap-3">
-        <button onClick={onLanjut} className="tombol w-full bg-daun py-4 text-2xl text-white">Lanjut ➜</button>
+        <button onClick={onLanjut} className={`tombol w-full py-4 text-2xl text-white ${tamat ? 'animate-denyut bg-jeruk' : 'bg-daun'}`}>{tamat ? '🎓 Ada kejutan!' : 'Lanjut ➜'}</button>
         <button onClick={onUlang} className="tombol w-full bg-white py-3 text-lg">Main lagi</button>
       </div>
     </div>

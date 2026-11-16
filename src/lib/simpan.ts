@@ -19,6 +19,10 @@ export type Progres = {
   batasMenit: 15 | 30 | 45
   efekSuara: boolean
   modeDemo: boolean // buka semua stage (untuk mencoba / ustaz memeriksa)
+  namaAnak: string // untuk sertifikat
+  tamatDilihat: boolean // layar perayaan tamat sudah pernah tampil
+  latihan: { tanggal: string | null; total: number } // latihan harian
+  statistik: Record<string, { b: number; s: number }> // hasil latihan per bacaan: benar / salah
 }
 
 export const PROGRES_AWAL: Progres = {
@@ -32,6 +36,10 @@ export const PROGRES_AWAL: Progres = {
   batasMenit: 30,
   efekSuara: true,
   modeDemo: false,
+  namaAnak: '',
+  tamatDilihat: false,
+  latihan: { tanggal: null, total: 0 },
+  statistik: {},
 }
 
 export function muat(): Progres {
@@ -45,6 +53,8 @@ export function muat(): Progres {
       streak: { ...PROGRES_AWAL.streak, ...data.streak },
       misi: { ...PROGRES_AWAL.misi, ...data.misi },
       waktu: { ...PROGRES_AWAL.waktu, ...data.waktu },
+      latihan: { ...PROGRES_AWAL.latihan, ...data.latihan },
+      statistik: { ...data.statistik },
     }
   } catch {
     return structuredClone(PROGRES_AWAL)

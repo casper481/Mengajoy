@@ -7,7 +7,14 @@ import TombolSuara from '../components/TombolSuara'
 import { sorak, ting } from '../lib/efekSuara'
 import { pujianAcak, ukuranArab, type Soal } from './tipe'
 
-export default function PilihJawaban({ soal, onSelesai }: { soal: Soal[]; onSelesai: (salah: number) => void }) {
+type Props = {
+  soal: Soal[]
+  onSelesai: (salah: number) => void
+  /** dipanggil setiap satu soal terjawab benar, dengan jumlah salah di soal itu */
+  onHasil?: (no: number, salah: number) => void
+}
+
+export default function PilihJawaban({ soal, onSelesai, onHasil }: Props) {
   const [no, setNo] = useState(0)
   const [salah, setSalah] = useState(0)
   const [dicoret, setDicoret] = useState<number[]>([])
@@ -21,6 +28,7 @@ export default function PilihJawaban({ soal, onSelesai }: { soal: Soal[]; onSele
   const pilih = (i: number) => {
     if (benar || dicoret.includes(i)) return
     if (i === s.benar) {
+      onHasil?.(no, dicoret.length)
       ting()
       setBenar(true)
       setLedak((n) => n + 1)

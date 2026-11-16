@@ -11,14 +11,15 @@ type Props = {
   onLemari: () => void
   onMisi: () => void
   onOrtu: () => void
+  onLatihan: () => void
 }
 
 // posisi pulau (persen lebar) di jalur zig-zag
 const POSISI_X = [26, 72, 30, 70, 28, 70]
 const JARAK = 170
 
-export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
-  const { p, misiHariIniSelesai, pulauTerbuka } = useProgres()
+export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: Props) {
+  const { p, misiHariIniSelesai, pulauTerbuka, latihanTersedia, latihanHariIniSelesai } = useProgres()
   const tinggi = PULAU.length * JARAK + 140
 
   // titik-titik jalur untuk garis putus-putus
@@ -38,6 +39,23 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu }: Props) {
   return (
     <div className="flex min-h-full flex-col">
       <BarAtas judul="Peta Petualangan" />
+      {latihanTersedia && (
+        <button
+          onClick={() => {
+            pop()
+            onLatihan()
+          }}
+          className={`tombol mx-4 mt-1 flex items-center gap-3 px-4 py-3 text-left ${latihanHariIniSelesai ? 'bg-white/80' : 'animate-denyut bg-white'}`}
+        >
+          <span className="text-3xl">{latihanHariIniSelesai ? '✅' : '🔁'}</span>
+          <span className="flex-1">
+            <span className="block text-lg font-extrabold leading-tight">Latihan Harian</span>
+            <span className="block text-sm font-bold text-slate-500">
+              {latihanHariIniSelesai ? 'Sudah latihan hari ini. Mau ulang lagi?' : 'Ulang bacaan yang sudah dipelajari (2 menit)'}
+            </span>
+          </span>
+        </button>
+      )}
 
       <div className="relative mx-auto w-full max-w-md shrink-0 grow" style={{ minHeight: tinggi }}>
         {/* laut */}

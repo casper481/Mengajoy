@@ -5,9 +5,12 @@ import { HURUF } from '../data/huruf'
 import { PULAU, STAGES, stagesOfPulau } from '../data/stages'
 import { useProgres } from '../lib/progres'
 import { formatMenit } from '../lib/tanggal'
+import { perluDiulang } from '../lib/latihan'
+import TeksCampur from '../components/TeksCampur'
 
-export default function AreaOrtu({ onKembali }: { onKembali: () => void }) {
-  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, reset } = useProgres()
+export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
+  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat } = useProgres()
+  const ulang = perluDiulang(p.statistik)
   const [konfirmasiReset, setKonfirmasiReset] = useState(false)
 
   const hurufDikuasai = new Set(STAGES.filter((s) => s.jenis === 'huruf' && (p.bintang[s.id] ?? 0) > 0).flatMap((s) => (s.jenis === 'huruf' ? s.huruf : [])))
@@ -25,6 +28,8 @@ export default function AreaOrtu({ onKembali }: { onKembali: () => void }) {
           <Kotak label="Total waktu belajar" nilai={formatMenit(p.waktu.totalDetik)} />
           <Kotak label="Misi selesai" nilai={`${p.misi.total}`} />
           <Kotak label="Hadiah terkumpul" nilai={`${p.hadiah.length}`} />
+          <Kotak label="Latihan harian" nilai={`${p.latihan.total} kali`} />
+          <Kotak label="Status" nilai={semuaTamat ? '🎓 Tamat L1–5' : 'Sedang belajar'} />
         </div>
 
         {/* Huruf dikuasai */}
@@ -71,6 +76,40 @@ export default function AreaOrtu({ onKembali }: { onKembali: () => void }) {
               )
             })}
           </div>
+        </Bagian>
+
+        <Bagian judul="Perlu diulang">
+          {ulang.length === 0 ? (
+            <div className="text-sm text-slate-500">Belum ada catatan. Daftar ini terisi dari hasil Latihan Harian: bacaan yang sering salah akan muncul di sini.</div>
+          ) : (
+            <div className="flex flex-col gap-1.5">
+              {ulang.map((u) => (
+                <div key={u.kunci} className="flex items-center justify-between rounded-lg bg-orange-50 px-3 py-1.5">
+                  <span className="font-bold"><TeksCampur teks={u.label} /></span>
+                  <span className="text-sm font-bold text-slate-500">salah {u.s}× · benar {u.b}×</span>
+                </div>
+              ))}
+              <div className="mt-1 text-xs text-slate-500">Bantu ananda mengulang bacaan ini, atau sampaikan ke guru ngajinya.</div>
+            </div>
+          )}
+        </Bagian>
+
+        <Bagian judul="Sertifikat">
+          <label className="block">
+            <span className="text-sm font-bold text-slate-500">Nama ananda (untuk sertifikat)</span>
+            <input
+              value={p.namaAnak}
+              onChange={(e) => setNama(e.target.value)}
+              placeholder="Tulis nama ananda"
+              className="mt-1 w-full rounded-xl border-2 border-slate-200 px-3 py-2 text-lg font-bold outline-none focus:border-laut"
+              style={{ userSelect: 'text' }}
+            />
+          </label>
+          {semuaTamat ? (
+            <button onClick={onSertifikat} className="tombol mt-3 w-full bg-jeruk py-3 text-lg text-white">🎓 Lihat & simpan sertifikat</button>
+          ) : (
+            <div className="mt-2 text-sm text-slate-500">Sertifikat terbuka setelah ananda menyelesaikan semua stage Level 1–5.</div>
+          )}
         </Bagian>
 
         {/* Batas waktu */}

@@ -21,6 +21,10 @@ type Aksi = {
   setBatas: (m: 15 | 30 | 45) => void
   setEfek: (v: boolean) => void
   setDemo: (v: boolean) => void
+  setNama: (nama: string) => void
+  tandaiTamat: () => void
+  /** Simpan hasil latihan harian: kunci bacaan + jumlah salah di soal itu */
+  catatLatihan: (hasil: { kunci: string; salah: number }[]) => void
   reset: () => void
   // nilai turunan
   streakAktif: number
@@ -30,6 +34,9 @@ type Aksi = {
   batasTercapai: boolean
   stageTerbuka: (stageId: string) => boolean
   pulauTerbuka: (pulauId: number) => boolean
+  semuaTamat: boolean
+  latihanTersedia: boolean
+  latihanHariIniSelesai: boolean
 }
 
 const Ctx = createContext<Aksi | null>(null)
@@ -99,6 +106,24 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
   const setBatas = useCallback((m: 15 | 30 | 45) => setP((s) => ({ ...s, batasMenit: m })), [])
   const setEfek = useCallback((v: boolean) => setP((s) => ({ ...s, efekSuara: v })), [])
   const setDemo = useCallback((v: boolean) => setP((s) => ({ ...s, modeDemo: v })), [])
+  const setNama = useCallback((nama: string) => setP((s) => ({ ...s, namaAnak: nama.slice(0, 30) })), [])
+  const tandaiTamat = useCallback(() => setP((s) => (s.tamatDilihat ? s : { ...s, tamatDilihat: true })), [])
+  const catatLatihan = useCallback(
+    (hasil: { kunci: string; salah: number }[]) => {
+      setP((s) => {
+        const statistik = { ...s.statistik }
+        for (const h of hasil) {
+          const lama = statistik[h.kunci] ?? { b: 0, s: 0 }
+          statistik[h.kunci] = h.salah === 0 ? { ...lama, b: lama.b + 1 } : { ...lama, s: lama.s + 1 }
+        }
+        const hi = hariIni()
+        const latihan = s.latihan.tanggal === hi ? s.latihan : { tanggal: hi, total: s.latihan.total + 1 }
+        return { ...s, statistik, latihan }
+      })
+      tandaiBelajar()
+    },
+    [tandaiBelajar],
+  )
   const reset = useCallback(() => {
     hapusSemua()
     setP({ ...structuredClone(PROGRES_AWAL), waktu: { tanggal: hariIni(), detikHariIni: 0, totalDetik: 0 } })
@@ -122,9 +147,16 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
     }
     const pulauSelesai = (id: number) => STAGES.filter((x) => x.pulau === id).every((x) => (p.bintang[x.id] ?? 0) > 0)
     const pulauTerbuka = (id: number) => p.modeDemo || id === 1 || pulauSelesai(id - 1)
+    const adaYangSelesai = Object.values(p.bintang).some((b) => b > 0)
     return {
       p,
       pulauTerbuka,
+      setNama,
+      tandaiTamat,
+      catatLatihan,
+      semuaTamat: STAGES.every((x) => (p.bintang[x.id] ?? 0) > 0),
+      latihanTersedia: adaYangSelesai,
+      latihanHariIniSelesai: p.latihan.tanggal === hi,
       mulai,
       selesaiStage,
       tandaiBelajar,
@@ -142,7 +174,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       batasTercapai: detikHariIni >= p.batasMenit * 60,
       stageTerbuka,
     }
-  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, reset])
+  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, reset])
 
   return <Ctx.Provider value={nilai}>{children}</Ctx.Provider>
 }

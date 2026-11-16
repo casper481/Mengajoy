@@ -10,8 +10,10 @@ import { IkonGembok } from '../components/Ikon'
 import NuriBicara from '../components/NuriBicara'
 import { AYAT, SURAH_RENCANA } from '../data/ayat'
 import { pop } from '../lib/efekSuara'
+import { useProgres } from '../lib/progres'
 
-export default function HalamanQuran({ onKembali }: { onKembali: () => void }) {
+export default function HalamanQuran({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
+  const { semuaTamat } = useProgres()
   const [info, setInfo] = useState<string | null>(null)
   const tersedia = AYAT.length > 0
 
@@ -33,6 +35,12 @@ export default function HalamanQuran({ onKembali }: { onKembali: () => void }) {
           Kamu sudah belajar huruf, harakat, menyambung, mad, dan tajwid dasar. Sebentar lagi kita membaca Al-Quran bersama!
         </div>
       </div>
+
+      {semuaTamat && (
+        <div className="mx-4 mt-3">
+          <button onClick={onSertifikat} className="tombol w-full bg-jeruk py-3 text-xl text-white">🎓 Lihat sertifikatku</button>
+        </div>
+      )}
 
       <div className="mt-4 px-4">
         <div className="mb-2 text-center font-extrabold text-slate-600">Surat yang akan kita baca</div>

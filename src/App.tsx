@@ -8,6 +8,8 @@ import AreaOrtu from './pages/AreaOrtu'
 import GerbangOrtu from './pages/GerbangOrtu'
 import HalamanPulau from './pages/HalamanPulau'
 import HalamanQuran from './pages/HalamanQuran'
+import LatihanHarian from './pages/LatihanHarian'
+import Tamat from './pages/Tamat'
 import { stageById } from './data/stages'
 import HalamanStage from './pages/HalamanStage'
 import Istirahat from './pages/Istirahat'
@@ -25,6 +27,8 @@ type Layar =
   | { nama: 'misi' }
   | { nama: 'gerbang' }
   | { nama: 'ortu' }
+  | { nama: 'latihan' }
+  | { nama: 'tamat' }
 
 const LAYAR_ORTU = ['gerbang', 'ortu']
 
@@ -53,7 +57,7 @@ export default function App() {
   const ke = (l: Layar) => setLayar(l)
 
   // Batas waktu: stage yang sedang berjalan boleh diselesaikan dulu.
-  const istirahat = batasTercapai && !LAYAR_ORTU.includes(layar.nama) && layar.nama !== 'stage'
+  const istirahat = batasTercapai && !LAYAR_ORTU.includes(layar.nama) && layar.nama !== 'stage' && layar.nama !== 'latihan'
 
   let isi
   if (istirahat) {
@@ -70,11 +74,12 @@ export default function App() {
             onLemari={() => ke({ nama: 'lemari' })}
             onMisi={() => ke({ nama: 'misi' })}
             onOrtu={() => ke({ nama: 'gerbang' })}
+            onLatihan={() => ke({ nama: 'latihan' })}
           />
         )
         break
       case 'pulau':
-        isi = layar.id === 6 ? <HalamanQuran onKembali={() => ke({ nama: 'peta' })} /> : <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
+        isi = layar.id === 6 ? <HalamanQuran onKembali={() => ke({ nama: 'peta' })} onSertifikat={() => ke({ nama: 'tamat' })} /> : <HalamanPulau pulauId={layar.id} onStage={(id) => ke({ nama: 'stage', id, ulang: 0 })} onKembali={() => ke({ nama: 'peta' })} />
         break
       case 'stage': {
         const pulau = stageById(layar.id).pulau
@@ -84,10 +89,17 @@ export default function App() {
             stageId={layar.id}
             onKembali={() => ke({ nama: 'pulau', id: pulau })}
             onUlang={() => ke({ nama: 'stage', id: layar.id, ulang: layar.ulang + 1 })}
+            onTamat={() => ke({ nama: 'tamat' })}
           />
         )
         break
       }
+      case 'latihan':
+        isi = <LatihanHarian onKembali={() => ke({ nama: 'peta' })} />
+        break
+      case 'tamat':
+        isi = <Tamat onQuran={() => ke({ nama: 'pulau', id: 6 })} onKembali={() => ke({ nama: 'peta' })} />
+        break
       case 'lemari':
         isi = <Lemari onKembali={() => ke({ nama: 'peta' })} />
         break
@@ -98,7 +110,7 @@ export default function App() {
         isi = <GerbangOrtu onLolos={() => ke({ nama: 'ortu' })} onKembali={() => ke({ nama: 'peta' })} />
         break
       case 'ortu':
-        isi = <AreaOrtu onKembali={() => ke({ nama: 'peta' })} />
+        isi = <AreaOrtu onKembali={() => ke({ nama: 'peta' })} onSertifikat={() => ke({ nama: 'tamat' })} />
         break
     }
   }
