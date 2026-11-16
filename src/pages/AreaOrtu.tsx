@@ -3,13 +3,18 @@ import { useState } from 'react'
 import BarAtas from '../components/BarAtas'
 import { HURUF } from '../data/huruf'
 import { PULAU, STAGES, stagesOfPulau } from '../data/stages'
-import { useProgres } from '../lib/progres'
+import { useProgres, type AksiUji } from '../lib/progres'
 import { formatMenit } from '../lib/tanggal'
 import { perluDiulang } from '../lib/latihan'
 import TeksCampur from '../components/TeksCampur'
 
 export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
-  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat } = useProgres()
+  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat, uji } = useProgres()
+  const [pesanUji, setPesanUji] = useState('')
+  const jalankan = (aksi: AksiUji, pesan: string) => {
+    uji(aksi)
+    setPesanUji(pesan)
+  }
   const ulang = perluDiulang(p.statistik)
   const [konfirmasiReset, setKonfirmasiReset] = useState(false)
 
@@ -152,11 +157,39 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
           )}
         </Bagian>
 
+        <Bagian judul="🧪 Alat Uji Coba (khusus prototipe)">
+          <div className="mb-2 text-xs text-slate-500">Untuk mencoba fitur dengan cepat. Akan dihapus sebelum app dirilis ke anak-anak.</div>
+          <div className="grid gap-2">
+            <TombolUji onClick={() => jalankan('hampir-tamat', 'Semua stage selesai kecuali stage terakhir (Pulau Tajwid, stage 4). Mainkan stage itu untuk melihat "Ada kejutan!".')}>
+              🎓 Hampir tamat (sisa 1 stage)
+            </TombolUji>
+            <TombolUji onClick={() => jalankan('tamatkan-semua', 'Semua stage selesai (3 bintang) dan semua hadiah didapat. Sertifikat sudah bisa dibuka.')}>
+              🏆 Tamatkan semua + semua hadiah
+            </TombolUji>
+            <TombolUji onClick={() => jalankan('hari-berikutnya', 'Sekarang dianggap sudah besok: misi dan latihan harian terbuka lagi, waktu belajar kembali 0. Belajar lagi supaya streak naik.')}>
+              📅 Lompat ke hari berikutnya
+            </TombolUji>
+            <TombolUji onClick={() => jalankan('habiskan-waktu', 'Batas waktu hari ini dianggap habis. Kembali ke peta untuk melihat layar istirahat.')}>
+              ⏰ Habiskan waktu hari ini
+            </TombolUji>
+            <TombolUji onClick={() => jalankan('reset-waktu', 'Waktu belajar hari ini kembali ke 0.')}>↩️ Kembalikan waktu hari ini</TombolUji>
+          </div>
+          {pesanUji && <div className="mt-3 rounded-xl bg-green-50 p-3 text-sm font-bold text-green-800">✓ {pesanUji}</div>}
+        </Bagian>
+
         <div className="text-center text-xs text-slate-500">
           Mengajoy — prototipe. Tanpa iklan, tanpa pembelian, tanpa tautan keluar. Data hanya disimpan di perangkat ini.
         </div>
       </div>
     </div>
+  )
+}
+
+function TombolUji({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick} className="tombol w-full bg-slate-100 px-3 py-2.5 text-left text-base">
+      {children}
+    </button>
   )
 }
 

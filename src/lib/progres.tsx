@@ -3,11 +3,13 @@
  * Setiap perubahan langsung disimpan ke localStorage.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { hadiahById, type Slot } from '../data/hadiah'
+import { HADIAH, hadiahById, type Slot } from '../data/hadiah'
 import { STAGES, stageById } from '../data/stages'
 import { hapusSemua, muat, PROGRES_AWAL, simpan, type Progres } from './simpan'
 import { hariIni, kemarin } from './tanggal'
 import { setEfekAktif } from './efekSuara'
+
+export type AksiUji = 'tamatkan-semua' | 'hampir-tamat' | 'habiskan-waktu' | 'reset-waktu' | 'hari-berikutnya'
 
 type Aksi = {
   p: Progres
@@ -26,6 +28,8 @@ type Aksi = {
   /** Simpan hasil latihan harian: kunci bacaan + jumlah salah di soal itu */
   catatLatihan: (hasil: { kunci: string; salah: number }[]) => void
   reset: () => void
+  /** Alat uji coba (prototipe) untuk mencoba fitur yang bergantung waktu/progres */
+  uji: (aksi: AksiUji) => void
   // nilai turunan
   streakAktif: number
   totalBintang: number
@@ -124,6 +128,35 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
     },
     [tandaiBelajar],
   )
+  const uji = useCallback((aksi: AksiUji) => {
+    setP((s) => {
+      const hi = hariIni()
+      const semua = (kecuali?: string) => Object.fromEntries(STAGES.filter((x) => x.id !== kecuali).map((x) => [x.id, 3]))
+      switch (aksi) {
+        case 'tamatkan-semua':
+          return { ...s, bintang: semua(), hadiah: HADIAH.map((h) => h.id), tamatDilihat: false }
+        case 'hampir-tamat': {
+          const terakhir = STAGES[STAGES.length - 1]
+          return { ...s, bintang: semua(terakhir.id), tamatDilihat: false, modeDemo: false }
+        }
+        case 'habiskan-waktu':
+          return { ...s, waktu: { ...s.waktu, tanggal: hi, detikHariIni: s.batasMenit * 60 } }
+        case 'reset-waktu':
+          return { ...s, waktu: { ...s.waktu, tanggal: hi, detikHariIni: 0 } }
+        case 'hari-berikutnya': {
+          // geser semua catatan "hari ini" menjadi "kemarin", seolah-olah sekarang sudah besok
+          const geser = (t: string | null) => (t === hi ? kemarin() : t)
+          return {
+            ...s,
+            streak: { ...s.streak, terakhir: geser(s.streak.terakhir) },
+            misi: { ...s.misi, tanggal: geser(s.misi.tanggal) },
+            latihan: { ...s.latihan, tanggal: geser(s.latihan.tanggal) },
+            waktu: { ...s.waktu, tanggal: geser(s.waktu.tanggal) ?? hi, detikHariIni: 0 },
+          }
+        }
+      }
+    })
+  }, [])
   const reset = useCallback(() => {
     hapusSemua()
     setP({ ...structuredClone(PROGRES_AWAL), waktu: { tanggal: hariIni(), detikHariIni: 0, totalDetik: 0 } })
@@ -167,6 +200,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       setEfek,
       setDemo,
       reset,
+      uji,
       streakAktif,
       totalBintang,
       misiHariIniSelesai: p.misi.tanggal === hi,
@@ -174,7 +208,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       batasTercapai: detikHariIni >= p.batasMenit * 60,
       stageTerbuka,
     }
-  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, reset])
+  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, uji, reset])
 
   return <Ctx.Provider value={nilai}>{children}</Ctx.Provider>
 }

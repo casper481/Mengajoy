@@ -48,6 +48,9 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 
 ## Yang bisa dicoba
 
+Daftar cek lengkap langkah demi langkah ada di **[PANDUAN-UJI.md](PANDUAN-UJI.md)**. Di Area Orang Tua tersedia **🧪 Alat Uji Coba** untuk mencoba fitur yang bergantung waktu (streak, misi harian, batas waktu, sertifikat) tanpa menunggu.
+
+
 | Fitur | Cara mencoba |
 |---|---|
 | Layar sambutan | Buka app, lalu tekan **Mulai Petualangan** |
@@ -132,4 +135,5 @@ mengajoy/
 - [ ] Bisa dipasang di layar HP seperti app (PWA) dan bisa dipakai offline sepenuhnya.
 - [ ] Uji coba dengan anak sungguhan, termasuk ukuran tombol dan kecepatan animasi.
 - [ ] Desain Nuri yang lebih final oleh ilustrator.
+- [ ] Hapus **Alat Uji Coba** dan **Mode coba** sebelum dirilis ke anak-anak.
 - [ ] Pemeriksaan merek "Mengajoy" di PDKI DJKI dan pendaftaran domain.
