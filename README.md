@@ -12,7 +12,7 @@ Prototipe ini berisi 6 pulau mengikuti urutan TPQ:
 | 3 | Menyambung Huruf | Sambung fathah, sambung kasrah/dhammah, tanwin, sukun | ✅ Bisa dimainkan |
 | 4 | Mad & Tasydid | Mad alif, mad ya, mad wau, tasydid | ✅ Bisa dimainkan |
 | 5 | Tajwid Dasar | Izhar/idgham, iqlab/ikhfa, mim mati, qalqalah/ghunnah | ✅ Bisa dimainkan |
-| 6 | Al-Quran | 9 surat pendek: baca per ayat & per kata | 🛠️ Tampilan siap — ⏳ teks ayat menunggu Mushaf Standar Indonesia (tashih LPMQ) |
+| 6 | Al-Quran | 9 surat pendek (42 ayat): baca per ayat & per kata | ✅ Bisa dibaca — teks dari Tanzil Project (Uthmani). ⏳ Rencana: ganti ke Mushaf Standar Indonesia + tashih LPMQ |
 
 Setiap pulau terbuka setelah pulau sebelumnya selesai.
 
@@ -87,7 +87,7 @@ mengajoy/
 │   │   ├── harakat.ts    ← fathah/kasrah/dhammah + daftar suku kata
 │   │   ├── materi-lanjutan.ts ← ★ materi Level 3–5 (kata latihan & hukum tajwid)
 │   │   ├── ayat.ts       ← Level 6: daftar surat + tempat teks ayat (SENGAJA masih kosong)
-│   │   ├── contoh-uji.ts ← kalimat latihan (BUKAN ayat) untuk menguji tampilan; tidak ikut ke versi rilis
+│   │   ├── teks-tanzil.ts ← teks 9 surat dari Tanzil Project (verbatim, JANGAN diubah manual)
 │   │   ├── stages.ts     ← pembagian pulau & stage
 │   │   ├── hadiah.ts     ← daftar aksesoris Nuri
 │   │   └── misi.ts       ← daftar misi harian
@@ -116,7 +116,9 @@ mengajoy/
 
 ## Aturan konten yang dipatuhi
 
-- **Tanpa teks ayat Al-Quran.** Level 3–5 memakai kata latihan, bukan potongan ayat. Teks ayat (Level 6) wajib memakai Mushaf Standar Indonesia yang ditashih LPMQ Kemenag.
+- Level 3–5 memakai kata latihan, bukan potongan ayat.
+- Teks ayat Level 6 saat ini: **Tanzil Project (tanzil.net)**, teks Uthmani, salinan verbatim (tidak diubah; diperiksa otomatis) dengan sumber dicantumkan sesuai syarat lisensinya. Gaya tulisannya Mushaf Madinah, bukan Mushaf Standar Indonesia. **Sebelum app diedarkan luas**, ganti dengan Mushaf Standar Indonesia dan urus tanda tashih LPMQ Kemenag.
+- Tautan ke tanzil.net (syarat lisensi) hanya ada di Area Orang Tua yang terkunci, bukan di layar anak.
 - Tidak ada gambar atau visualisasi nabi, rasul, maupun keluarganya. Satu-satunya tokoh adalah Nuri, burung ciptaan sendiri.
 - Tidak ada iklan, tautan keluar, atau pembelian di dalam app.
 - Tidak ada hitung mundur yang memaksa dan tidak ada notifikasi. Ada batas waktu harian yang diatur orang tua.
@@ -128,7 +130,8 @@ mengajoy/
 - [ ] **File audio**: 81 file belum direkam (lihat AUDIO-TODO.md).
 - [ ] **Pemeriksaan ustaz** atas `src/data/huruf.ts`, `src/data/harakat.ts`, dan `src/data/materi-lanjutan.ts` (nama latin, petunjuk, contoh, penjelasan tajwid).
 - [ ] Hamzah (ء) dan lam-alif (لا), jika TPQ Anda memasukkannya.
-- [ ] **Level 6: isi teks ayat** di `src/data/ayat.ts` (`BASMALAH` dan `TEKS_AYAT`) dari Mushaf Standar Indonesia (tashih LPMQ), plus audio qari berizin di `public/audio/ayat/` dan `public/audio/kata/`. Urus izin dan tashih ke LPMQ Kemenag. Tampilan bacanya sudah siap.
+- [ ] **Level 6: ganti teks Tanzil dengan Mushaf Standar Indonesia** (`src/data/ayat.ts`) dan urus **tanda tashih LPMQ Kemenag** sebelum app diedarkan luas.
+- [ ] Audio qari berizin di `public/audio/ayat/` dan `public/audio/kata/` (sekarang "audio belum tersedia").
 - [ ] Font khusus mushaf: pertimbangkan font resmi Mushaf Standar Indonesia agar bentuk tulisan sama dengan mushaf cetak.
 - [ ] Materi lanjutan yang belum ada: mad lainnya (mad wajib/jaiz, dll.), hukum lam jalalah, ra tafkhim/tarqiq, waqaf.
 - [ ] Akun & sinkron antar-perangkat (sekarang progres hanya tersimpan di satu browser).

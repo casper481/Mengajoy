@@ -38,7 +38,8 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ **Level 3 Menyambung**: memilih cara baca (misal كَتَبَ = ka-ta-ba)
 - ☐ **Level 4 Mad**: soal "pendek atau panjang?"
 - ☐ **Level 5 Tajwid**: contoh `نْ + ب` → pilih nama hukumnya
-- ☐ **Pulau Al-Quran**: daftar 9 surat terkunci, ketuk salah satu → "Sedang disiapkan"; tidak ada teks ayat (halaman baca surat baru bisa dicoba setelah teks resmi diisi)
+- ☐ **Pulau Al-Quran**: 9 surat bisa dibuka. Di setiap surat: basmalah di atas (kecuali Al-Fatihah), **Ikuti per kata** menyorot kata satu per satu, **Aku sudah bisa** → konfirmasi orang tua → ayat berikutnya; setelah semua ayat → perayaan dan ✅ di daftar surat
+- ☐ **Minta ustaz memeriksa** tampilan teks ayat di HP (harakat, tanda waqaf, nomor ayat)
 - ☐ Matikan lagi Mode coba
 
 ## F. Latihan Harian

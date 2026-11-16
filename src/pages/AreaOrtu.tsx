@@ -177,6 +177,15 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
           {pesanUji && <div className="mt-3 rounded-xl bg-green-50 p-3 text-sm font-bold text-green-800">✓ {pesanUji}</div>}
         </Bagian>
 
+        <Bagian judul="Sumber teks Al-Quran">
+          <div className="text-sm text-slate-600">
+            Teks ayat di Level 6: <b>Tanzil Project</b>, teks Uthmani (salinan verbatim, tidak diubah).{' '}
+            <a href="https://tanzil.net" target="_blank" rel="noreferrer" className="font-bold text-laut underline">
+              tanzil.net
+            </a>
+          </div>
+        </Bagian>
+
         <div className="text-center text-xs text-slate-500">
           Mengajoy — prototipe. Tanpa iklan, tanpa pembelian, tanpa tautan keluar. Data hanya disimpan di perangkat ini.
         </div>

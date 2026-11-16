@@ -9,7 +9,7 @@ import { Konfeti } from '../components/Efek'
 import Nuri from '../components/Nuri'
 import NuriBicara from '../components/NuriBicara'
 import TombolSuara from '../components/TombolSuara'
-import { audioAyat, audioKata, ayatSurah, pembukaSurah, SURAH_RENCANA, type KataAyat } from '../data/ayat'
+import { audioAyat, audioKata, ayatSurah, pembukaSurah, SUMBER_TEKS, SURAH_RENCANA, type KataAyat } from '../data/ayat'
 import { cekAudio, putar } from '../lib/audio'
 import { perayaan, pop } from '../lib/efekSuara'
 import { useProgres } from '../lib/progres'
@@ -33,6 +33,7 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
   const batal = useRef(false)
 
   const a = ayat[idx]
+  const adaLatin = a.kata.some((k) => k.latin)
   const sudahLancar = lancar.includes(a.ayat)
 
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
         <NuriBicara
           ukuran={64}
           ekspresi="senang"
-          teks={idx === 0 && lancar.length === 0 ? 'Sebelum membaca, ucapkan ta\'awudz dan basmalah bersama Ayah atau Bunda, ya.' : 'Dengarkan dulu, lalu ikuti per kata.'}
+          teks={idx === 0 && lancar.length === 0 ? 'Sebelum membaca, ucapkan ta\'awudz dan basmalah bersama Ayah atau Bunda, ya.' : 'Ikuti per kata pelan-pelan, lalu baca bersama Ayah atau Bunda.'}
         />
       </div>
 
@@ -133,12 +134,13 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
               className={`flex flex-col items-center rounded-2xl px-2 py-1 transition ${sorot === i ? 'scale-110 bg-yellow-100 ring-4 ring-bintang' : ''}`}
             >
               <span className="arab text-5xl leading-tight">{k.arab}</span>
-              {latin && <span className="text-sm font-bold text-slate-500" dir="ltr">{k.latin}</span>}
+              {latin && k.latin && <span className="text-sm font-bold text-slate-500" dir="ltr">{k.latin}</span>}
             </button>
           ))}
           <span className="arab flex items-center text-4xl text-daun">﴿{angkaArab(a.ayat)}﴾</span>
         </div>
       </div>
+      <div className="mt-1 text-center text-[11px] text-slate-400">Teks: {SUMBER_TEKS.nama} (tanzil.net)</div>
 
       <div className="mx-4 mt-4 grid grid-cols-2 gap-3">
         <div className="flex flex-col items-center rounded-2xl bg-white/80 py-2">
@@ -151,12 +153,12 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
         </button>
       </div>
 
-      <div className="mx-4 mt-3 flex items-center justify-between rounded-2xl bg-white/70 px-4 py-2">
+      {adaLatin && <div className="mx-4 mt-3 flex items-center justify-between rounded-2xl bg-white/70 px-4 py-2">
         <span className="font-bold">Tampilkan cara baca latin</span>
         <button onClick={() => setLatin(!latin)} className={`relative h-8 w-14 rounded-full ${latin ? 'bg-daun' : 'bg-slate-300'}`} aria-label="Latin">
           <span className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all ${latin ? 'left-7' : 'left-1'}`} />
         </button>
-      </div>
+      </div>}
 
       <div className="mx-4 mt-4">
         {sudahLancar ? (
@@ -179,7 +181,7 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center">
           <div className="animate-masuk w-full max-w-sm rounded-3xl bg-white p-6 text-center">
             <div className="text-lg font-bold text-slate-500">Untuk Ayah / Bunda</div>
-            <div className="mt-1 text-xl font-extrabold">Sudahkah ananda membaca ayat {a.ayat} dengan benar, tanpa melihat tulisan latin?</div>
+            <div className="mt-1 text-xl font-extrabold">Sudahkah ananda membaca ayat {a.ayat} dengan benar{adaLatin ? ', tanpa melihat tulisan latin' : ''}?</div>
             <div className="mt-5 grid grid-cols-2 gap-3">
               <button onClick={() => setTanya(false)} className="tombol bg-slate-100 py-3 text-lg">Belum, ulang</button>
               <button onClick={konfirmasi} className="tombol bg-daun py-3 text-lg text-white">Ya, lancar ✓</button>

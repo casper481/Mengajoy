@@ -2,15 +2,14 @@
  * ============================================================
  *  LEVEL 6 — MEMBACA AYAT
  * ============================================================
- *  TEKS AYAT SENGAJA MASIH KOSONG.
+ *  SUMBER TEKS SAAT INI: Tanzil Project (tanzil.net), teks Uthmani,
+ *  salinan verbatim di teks-tanzil.ts (atas keputusan pemilik app).
+ *  Gaya tulisannya mengikuti Mushaf Madinah, BUKAN Mushaf Standar
+ *  Indonesia. Rencana: ganti dengan teks Mushaf Standar Indonesia
+ *  dan urus tanda tashih LPMQ Kemenag sebelum app diedarkan luas.
+ *  JANGAN mengetik teks ayat dari ingatan.
  *
- *  Teks WAJIB diambil dari Mushaf Standar Indonesia yang sudah
- *  ditashih Lajnah Pentashihan Mushaf Al-Qur'an (LPMQ) Kemenag,
- *  dan app perlu melalui proses pentashihan sebelum terbit.
- *  JANGAN mengetik teks ayat dari ingatan atau menyalin dari
- *  sumber yang tidak resmi.
- *
- *  Cara mengisi (setelah teks resmi didapat):
+ *  Cara mengganti sumber teks:
  *  1. Isi BASMALAH (dipakai sebagai pembuka surat selain Al-Fatihah).
  *  2. Tambahkan setiap ayat ke TEKS_AYAT, dipecah per kata, contoh bentuk:
  *     {
@@ -24,7 +23,7 @@
  *  Surat otomatis terbuka di app begitu SEMUA ayatnya sudah diisi.
  * ============================================================
  */
-import { CONTOH_UJI } from './contoh-uji'
+import { AYAT_TANZIL, BASMALAH_TANZIL } from './teks-tanzil'
 
 export type KataAyat = { arab: string; latin: string; audio?: string }
 export type Ayat = { surah: number; ayat: number; kata: KataAyat[]; audioAyat?: string }
@@ -42,15 +41,21 @@ export const SURAH_RENCANA: { nomor: number; nama: string; arti: string; jumlahA
   { nomor: 103, nama: "Al-'Ashr", arti: 'Masa', jumlahAyat: 3 },
 ]
 
-/** Basmalah pembuka surat. KOSONG sampai teks resmi tersedia. */
-export const BASMALAH: KataAyat[] = []
+/** Sumber teks (wajib ditampilkan sesuai syarat lisensi Tanzil). */
+export const SUMBER_TEKS = { nama: 'Tanzil Project', url: 'https://tanzil.net', jenis: 'Uthmani' }
 
-/** Teks ayat. KOSONG sampai teks Mushaf Standar Indonesia (tashih LPMQ) tersedia. */
-export const TEKS_AYAT: Ayat[] = []
+/** Basmalah pembuka surat (selain Al-Fatihah). */
+export const BASMALAH: KataAyat[] = BASMALAH_TANZIL.split(' ').map((arab) => ({ arab, latin: '' }))
 
-// Hanya untuk uji coba tampilan di komputer pengembang (tidak pernah ikut ke app yang dirilis).
-const SEMUA_AYAT: Ayat[] = TEKS_AYAT.length ? TEKS_AYAT : CONTOH_UJI.ayat
-const PEMBUKA: KataAyat[] = BASMALAH.length ? BASMALAH : CONTOH_UJI.pembuka
+/** Teks ayat, dipecah per kata. Latin dikosongkan: anak dilatih membaca huruf Arab. */
+export const TEKS_AYAT: Ayat[] = AYAT_TANZIL.map((a) => ({
+  surah: a.surah,
+  ayat: a.ayat,
+  kata: a.kata.map((arab) => ({ arab, latin: '' })),
+}))
+
+const SEMUA_AYAT: Ayat[] = TEKS_AYAT
+const PEMBUKA: KataAyat[] = BASMALAH
 
 export const ayatSurah = (nomor: number) => SEMUA_AYAT.filter((a) => a.surah === nomor).sort((a, b) => a.ayat - b.ayat)
 

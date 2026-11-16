@@ -42,7 +42,7 @@ export default function HalamanQuran({ onKembali, onSertifikat, onSurat }: { onK
       )}
 
       <div className="mt-4 px-4">
-        <div className="mb-2 text-center font-extrabold text-slate-600">Surat yang akan kita baca</div>
+        <div className="mb-2 text-center font-extrabold text-slate-600">Ayo membaca surat pendek!</div>
         <div className="grid grid-cols-2 gap-3">
           {SURAH_RENCANA.map((s, i) => (
             <button
@@ -69,9 +69,9 @@ export default function HalamanQuran({ onKembali, onSertifikat, onSurat }: { onK
 
       <div className="mx-4 mt-5 rounded-2xl bg-white/80 p-4 text-sm leading-relaxed text-slate-600">
         <div className="mb-1 font-extrabold text-tinta">Untuk Ayah & Bunda</div>
-        Teks ayat di Mengajoy akan memakai <b>Mushaf Standar Indonesia</b> yang sudah ditashih Lajnah Pentashihan Mushaf Al-Qur'an (LPMQ) Kemenag,
-        dan bacaannya diperdengarkan oleh qari yang berizin. Selama menunggu, ananda bisa terus berlatih di pulau-pulau sebelumnya dan mengaji
-        bersama guru TPQ.
+        Teks ayat di versi uji coba ini diambil dari <b>Tanzil Project (tanzil.net)</b>, teks Uthmani yang telah diverifikasi. Gaya tulisannya
+        mengikuti Mushaf Madinah, sehingga bentuk beberapa tanda bisa sedikit berbeda dengan mushaf di TPQ. Ke depan akan diganti dengan{' '}
+        <b>Mushaf Standar Indonesia</b> yang ditashih LPMQ Kemenag. Suara qari belum tersedia, jadi bacalah bersama ananda atau guru ngajinya.
       </div>
 
       {info && (
