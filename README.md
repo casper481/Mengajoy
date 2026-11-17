@@ -46,6 +46,26 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 
 ---
 
+## Dunia Mengajoy (sistem agar anak ingin kembali)
+
+Prinsip: **semua hadiah hanya dari belajar**. Tidak ada iklan, pembelian, atau hitung mundur; anak tidak dihukum saat absen.
+
+| Fitur | Isi |
+|---|---|
+| Karakter anak | Dibuat saat pertama kali: kulit, rambut, peci/hijab, baju (`src/components/Avatar.tsx`) |
+| Pulau Rumahku | Pulau milik anak; dihias dengan dekorasi yang dibeli pakai koin hasil belajar. Tempat dekorasi baru terbuka tiap naik level |
+| Momo (hewan pendamping) | Tumbuh 5 tahap mengikuti XP: telur → menetas → kecil → remaja → bersayap |
+| Koin & level | Koin & XP dari bintang, latihan, ayat, misi. Level → kartu ilmu & tempat dekorasi baru |
+| Misi Hari Ini | 3 misi belajar yang menyesuaikan kemajuan anak + peti bonus + misi dunia nyata (`src/lib/misiHarian.ts`) |
+| Perjalanan Api | Hadiah streak hari 1, 3, 7, 14, 30. Terlewat 1 hari → api dijaga Nuri (sekali seminggu) |
+| Event pekan | Senin–Minggu tantangan berbeda, tidak wajib (`EVENT_MINGGUAN` di `src/data/dunia.ts`) |
+| Koleksi | Kostum Nuri, 15 lencana, 12 kartu ilmu (**kartu ilmu mohon diperiksa ustaz**) |
+| Orang tua | Laporan 7 hari, kirim apresiasi (stiker + pesan) yang muncul di peta |
+
+Semua aturan (harga dekorasi, hadiah streak, tahap Momo, isi kartu ilmu, event) ada di **`src/data/dunia.ts`**.
+
+**Mengukur retensi:** prototipe ini belum mengirim data ke mana pun (privasi anak). Area Orang Tua sudah mencatat hari aktif & menit per hari di perangkat. Untuk mengukur retensi semua pengguna (D1/D7/D30), nanti perlu backend/analitik dengan persetujuan orang tua.
+
 ## Yang bisa dicoba
 
 Daftar cek lengkap langkah demi langkah ada di **[PANDUAN-UJI.md](PANDUAN-UJI.md)**. Di Area Orang Tua tersedia **🧪 Alat Uji Coba** untuk mencoba fitur yang bergantung waktu (streak, misi harian, batas waktu, sertifikat) tanpa menunggu.

@@ -6,10 +6,24 @@ import { PULAU, STAGES, stagesOfPulau } from '../data/stages'
 import { useProgres, type AksiUji } from '../lib/progres'
 import { formatMenit } from '../lib/tanggal'
 import { perluDiulang } from '../lib/latihan'
+import { PESAN_APRESIASI, STIKER_APRESIASI } from '../data/dunia'
+import { hariIni } from '../lib/tanggal'
 import TeksCampur from '../components/TeksCampur'
 
 export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
-  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat, uji } = useProgres()
+  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat, uji, level, kirimApresiasi } = useProgres()
+  const [stiker, setStiker] = useState(STIKER_APRESIASI[0])
+  const [pesan, setPesan] = useState(PESAN_APRESIASI[0])
+  const [terkirim, setTerkirim] = useState(false)
+  const pekan = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - (6 - i))
+    const t = hariIni(d)
+    return { t, nama: d.toLocaleDateString('id-ID', { weekday: 'short' }), menit: Math.round((p.aktif[t] ?? 0) / 60) }
+  })
+  const hariAktif = pekan.filter((x) => x.menit > 0).length
+  const menitPekan = pekan.reduce((a, x) => a + x.menit, 0)
+  const maksMenit = Math.max(5, ...pekan.map((x) => x.menit))
   const [pesanUji, setPesanUji] = useState('')
   const jalankan = (aksi: AksiUji, pesan: string) => {
     uji(aksi)
@@ -81,6 +95,61 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
               )
             })}
           </div>
+        </Bagian>
+
+        <Bagian judul="📊 Laporan 7 hari terakhir">
+          <div className="mb-3 grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-xl bg-slate-50 p-2">
+              <div className="text-xl font-extrabold">{hariAktif}/7</div>
+              <div className="text-[11px] font-bold text-slate-500">hari belajar</div>
+            </div>
+            <div className="rounded-xl bg-slate-50 p-2">
+              <div className="text-xl font-extrabold">{menitPekan}</div>
+              <div className="text-[11px] font-bold text-slate-500">menit</div>
+            </div>
+            <div className="rounded-xl bg-slate-50 p-2">
+              <div className="text-xl font-extrabold">Lv {level}</div>
+              <div className="text-[11px] font-bold text-slate-500">🪙 {p.koin} koin</div>
+            </div>
+          </div>
+          <div className="flex h-28 items-end gap-2">
+            {pekan.map((x) => (
+              <div key={x.t} className="flex flex-1 flex-col items-center gap-1">
+                <span className="text-[10px] font-bold text-slate-500">{x.menit || ''}</span>
+                <div className="w-full rounded-t-lg bg-gradient-to-t from-[#3fb24f] to-[#7ee081]" style={{ height: `${(x.menit / maksMenit) * 80}px`, minHeight: x.menit ? 6 : 2, opacity: x.menit ? 1 : 0.25 }} />
+                <span className="text-[10px] font-bold text-slate-500">{x.nama}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 text-xs text-slate-500">Menit belajar per hari. Rutin sedikit lebih baik daripada lama sekali-sekali.</div>
+        </Bagian>
+
+        <Bagian judul="💌 Kirim apresiasi untuk ananda">
+          <div className="mb-2 text-sm text-slate-600">Pesan akan muncul di peta saat ananda membuka app (+20 koin).</div>
+          <div className="mb-2 flex flex-wrap gap-2">
+            {STIKER_APRESIASI.map((s) => (
+              <button key={s} onClick={() => setStiker(s)} className={`h-12 w-12 rounded-xl border-4 text-2xl ${stiker === s ? 'border-[#ff8a2b] bg-orange-50' : 'border-slate-100 bg-white'}`}>
+                {s}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {PESAN_APRESIASI.map((m) => (
+              <button key={m} onClick={() => setPesan(m)} className={`rounded-xl border-2 px-3 py-2 text-left text-sm font-bold ${pesan === m ? 'border-[#ff8a2b] bg-orange-50' : 'border-slate-100 bg-white'}`}>
+                {m}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => {
+              kirimApresiasi(stiker, pesan)
+              setTerkirim(true)
+              setTimeout(() => setTerkirim(false), 2500)
+            }}
+            className="tombol-game jeruk mt-3 w-full py-3 text-lg"
+          >
+            {terkirim ? '✓ Terkirim!' : `Kirim ${stiker}`}
+          </button>
         </Bagian>
 
         <Bagian judul="Perlu diulang">
@@ -173,6 +242,8 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
               ⏰ Habiskan waktu hari ini
             </TombolUji>
             <TombolUji onClick={() => jalankan('reset-waktu', 'Waktu belajar hari ini kembali ke 0.')}>↩️ Kembalikan waktu hari ini</TombolUji>
+            <TombolUji onClick={() => jalankan('tambah-koin', '+500 koin untuk mencoba menghias Pulau Rumahku.')}>🪙 Tambah 500 koin</TombolUji>
+            <TombolUji onClick={() => jalankan('tambah-xp', '+300 XP: level naik, Momo tumbuh, tempat dekorasi & kartu ilmu terbuka.')}>⭐ Tambah 300 XP</TombolUji>
           </div>
           {pesanUji && <div className="mt-3 rounded-xl bg-green-50 p-3 text-sm font-bold text-green-800">✓ {pesanUji}</div>}
         </Bagian>

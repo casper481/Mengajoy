@@ -19,6 +19,13 @@ import Misi from './pages/Misi'
 import Peta from './pages/Peta'
 import Sambutan from './pages/Sambutan'
 import LatarLembut from './components/dunia/LatarLembut'
+import BuatAvatar from './pages/BuatAvatar'
+import Rumahku from './pages/Rumahku'
+import Koleksi from './pages/Koleksi'
+import Streak from './pages/Streak'
+import EventMingguan from './pages/EventMingguan'
+import { NavCtx } from './lib/navigasi'
+import type { Tujuan } from './lib/misiHarian'
 
 type Layar =
   | { nama: 'sambutan' }
@@ -32,12 +39,17 @@ type Layar =
   | { nama: 'latihan' }
   | { nama: 'tamat' }
   | { nama: 'surat'; nomor: number }
+  | { nama: 'avatar'; lanjut: 'peta' | 'rumah' }
+  | { nama: 'rumah' }
+  | { nama: 'koleksi' }
+  | { nama: 'streak' }
+  | { nama: 'event' }
 
 const LAYAR_ORTU = ['gerbang', 'ortu']
 
 export default function App() {
   const [layar, setLayar] = useState<Layar>({ nama: 'sambutan' })
-  const { tambahWaktu, batasTercapai } = useProgres()
+  const { p, tambahWaktu, batasTercapai } = useProgres()
   const atas = useRef<HTMLDivElement>(null)
 
   // Hitung waktu belajar: hanya saat app terlihat & anak sedang di layar anak.
@@ -58,6 +70,12 @@ export default function App() {
   }, [layar])
 
   const ke = (l: Layar) => setLayar(l)
+  const pergi = (t: Tujuan) => {
+    if (t.jenis === 'stage') ke({ nama: 'pulau', id: t.pulau })
+    else if (t.jenis === 'latihan') ke({ nama: 'latihan' })
+    else if (t.jenis === 'quran') ke({ nama: 'pulau', id: 6 })
+    else ke({ nama: 'peta' })
+  }
 
   // Batas waktu: stage yang sedang berjalan boleh diselesaikan dulu.
   const istirahat = batasTercapai && !LAYAR_ORTU.includes(layar.nama) && layar.nama !== 'stage' && layar.nama !== 'latihan'
@@ -68,13 +86,15 @@ export default function App() {
   } else {
     switch (layar.nama) {
       case 'sambutan':
-        isi = <Sambutan onMulai={() => ke({ nama: 'peta' })} />
+        isi = <Sambutan onMulai={() => ke(p.avatarDibuat ? { nama: 'peta' } : { nama: 'avatar', lanjut: 'peta' })} />
         break
       case 'peta':
         isi = (
           <Peta
             onPulau={(id) => ke({ nama: 'pulau', id })}
-            onLemari={() => ke({ nama: 'lemari' })}
+            onRumah={() => ke({ nama: 'rumah' })}
+            onKoleksi={() => ke({ nama: 'koleksi' })}
+            onEvent={() => ke({ nama: 'event' })}
             onMisi={() => ke({ nama: 'misi' })}
             onOrtu={() => ke({ nama: 'gerbang' })}
             onLatihan={() => ke({ nama: 'latihan' })}
@@ -106,11 +126,26 @@ export default function App() {
       case 'surat':
         isi = <HalamanSurat key={layar.nomor} nomor={layar.nomor} onKembali={() => ke({ nama: 'pulau', id: 6 })} />
         break
+      case 'avatar':
+        isi = <BuatAvatar onSelesai={() => ke({ nama: layar.lanjut })} />
+        break
+      case 'rumah':
+        isi = <Rumahku onKembali={() => ke({ nama: 'peta' })} onAvatar={() => ke({ nama: 'avatar', lanjut: 'rumah' })} />
+        break
+      case 'koleksi':
+        isi = <Koleksi onKembali={() => ke({ nama: 'peta' })} />
+        break
+      case 'streak':
+        isi = <Streak onKembali={() => ke({ nama: 'peta' })} />
+        break
+      case 'event':
+        isi = <EventMingguan onKembali={() => ke({ nama: 'peta' })} onPergi={pergi} />
+        break
       case 'lemari':
         isi = <Lemari onKembali={() => ke({ nama: 'peta' })} />
         break
       case 'misi':
-        isi = <Misi onKembali={() => ke({ nama: 'peta' })} />
+        isi = <Misi onKembali={() => ke({ nama: 'peta' })} onPergi={pergi} />
         break
       case 'gerbang':
         isi = <GerbangOrtu onLolos={() => ke({ nama: 'ortu' })} onKembali={() => ke({ nama: 'peta' })} />
@@ -122,9 +157,11 @@ export default function App() {
   }
 
   return (
+    <NavCtx.Provider value={{ keStreak: () => ke({ nama: 'streak' }) }}>
     <div ref={atas} className="relative mx-auto flex min-h-full w-full max-w-md flex-col">
-      {!istirahat && !['sambutan', 'peta'].includes(layar.nama) && !(layar.nama === 'pulau' && layar.id !== 6) && <LatarLembut />}
+      {!istirahat && !['sambutan', 'peta', 'rumah'].includes(layar.nama) && !(layar.nama === 'pulau' && layar.id !== 6) && <LatarLembut />}
       <div className="relative z-10 flex min-h-full flex-1 flex-col">{isi}</div>
     </div>
+    </NavCtx.Provider>
   )
 }

@@ -8,10 +8,12 @@ import { perayaan } from '../lib/efekSuara'
 import { buatLatihanHarian } from '../lib/latihan'
 import { useProgres } from '../lib/progres'
 
-export default function LatihanHarian({ onKembali }: { onKembali: () => void }) {
+type Props = { onKembali: () => void; pulau?: number[]; jumlah?: number; judul?: string; onSelesai?: () => void }
+
+export default function LatihanHarian({ onKembali, pulau, jumlah = 6, judul = '🔁 Latihan Harian', onSelesai }: Props) {
   const { p, catatLatihan, streakAktif } = useProgres()
   // soal dibuat sekali saat halaman dibuka
-  const soal = useMemo(() => buatLatihanHarian(p.bintang, p.statistik), []) // eslint-disable-line react-hooks/exhaustive-deps
+  const soal = useMemo(() => buatLatihanHarian(p.bintang, p.statistik, jumlah, pulau), []) // eslint-disable-line react-hooks/exhaustive-deps
   const hasil = useRef<{ kunci: string; salah: number }[]>([])
   const [selesai, setSelesai] = useState(false)
 
@@ -54,7 +56,7 @@ export default function LatihanHarian({ onKembali }: { onKembali: () => void }) 
         <button onClick={onKembali} aria-label="Tutup" className="tombol flex h-12 w-12 items-center justify-center bg-white text-2xl font-extrabold">
           ✕
         </button>
-        <div className="flex-1 text-center text-lg font-extrabold">🔁 Latihan Harian</div>
+        <div className="flex-1 text-center text-lg font-extrabold">{judul}</div>
         <div className="w-12" />
       </div>
       <PilihJawaban
@@ -64,6 +66,7 @@ export default function LatihanHarian({ onKembali }: { onKembali: () => void }) 
         }}
         onSelesai={() => {
           catatLatihan(hasil.current.filter(Boolean))
+          onSelesai?.()
           setSelesai(true)
           setTimeout(perayaan, 200)
         }}

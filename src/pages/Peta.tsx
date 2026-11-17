@@ -4,7 +4,10 @@ import BarAtas from '../components/BarAtas'
 import { Awan, BatuKecil, Kilau, Perahu, PohonKelapa, Teratai } from '../components/dunia/Hiasan'
 import Laut from '../components/dunia/Laut'
 import GambarPulau from '../components/dunia/Pulau'
-import { IkonBintang, IkonGembok, IkonLemari, IkonMisi, IkonOrangTua } from '../components/Ikon'
+import { IkonBintang, IkonGembok, IkonMisi, IkonOrangTua } from '../components/Ikon'
+import Peliharaan from '../components/Peliharaan'
+import { EVENT_MINGGUAN, tahapPeliharaan } from '../data/dunia'
+import { Konfeti } from '../components/Efek'
 import Nuri from '../components/Nuri'
 import { PULAU, stagesOfPulau } from '../data/stages'
 import { pop } from '../lib/efekSuara'
@@ -12,10 +15,12 @@ import { useProgres } from '../lib/progres'
 
 type Props = {
   onPulau: (id: number) => void
-  onLemari: () => void
+  onRumah: () => void
+  onKoleksi: () => void
   onMisi: () => void
   onOrtu: () => void
   onLatihan: () => void
+  onEvent: () => void
 }
 
 // Ukuran "dunia" dalam satuan SVG (lebar 400). Pulau 1 di bawah, naik ke atas.
@@ -25,8 +30,9 @@ const TINGGI = PULAU.length * JARAK + 160
 const X = [124, 276, 126, 274, 124, 200]
 const titikPulau = (i: number) => ({ x: X[i], y: TINGGI - 190 - i * JARAK })
 
-export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: Props) {
-  const { p, misiHariIniSelesai, pulauTerbuka, latihanTersedia, latihanHariIniSelesai } = useProgres()
+export default function Peta({ onPulau, onRumah, onKoleksi, onMisi, onOrtu, onLatihan, onEvent }: Props) {
+  const { p, pulauTerbuka, latihanTersedia, latihanHariIniSelesai, harian, apresiasiBaru, bacaApresiasi } = useProgres()
+  const misiBelumDiambil = !harian.diklaim.includes('bonus')
   const pulauAktif = [...PULAU].reverse().find((x) => pulauTerbuka(x.id))?.id ?? 1
   const refAktif = useRef<HTMLDivElement>(null)
 
@@ -50,23 +56,35 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: P
     <div className="relative flex min-h-full flex-col bg-[#3cc0dc]">
       <BarAtas judul="Peta Petualangan" />
 
-      {latihanTersedia && (
+      <div className="relative z-20 mx-3 mt-1 grid grid-cols-2 gap-2">
         <button
           onClick={() => {
             pop()
             onLatihan()
           }}
-          className={`panel-game relative z-20 mx-3 mt-1 flex items-center gap-3 px-3 py-2 text-left ${latihanHariIniSelesai ? '' : 'animate-denyut'}`}
+          disabled={!latihanTersedia}
+          className={`panel-game flex items-center gap-2 px-2 py-2 text-left ${latihanTersedia && !latihanHariIniSelesai ? 'animate-denyut' : ''} ${latihanTersedia ? '' : 'opacity-60'}`}
         >
-          <span className="tombol-game ungu flex h-12 w-12 shrink-0 items-center justify-center !rounded-2xl text-2xl">{latihanHariIniSelesai ? '✓' : '🔁'}</span>
-          <span className="flex-1">
-            <span className="block text-lg font-extrabold leading-tight text-[#6b4e24]">Latihan Harian</span>
-            <span className="block text-sm font-bold text-[#9a7b4f]">
-              {latihanHariIniSelesai ? 'Sudah latihan hari ini. Mau ulang lagi?' : 'Ulang bacaan yang sudah dipelajari (2 menit)'}
-            </span>
+          <span className="tombol-game ungu flex h-10 w-10 shrink-0 items-center justify-center !rounded-xl text-xl">{latihanHariIniSelesai ? '✓' : '🔁'}</span>
+          <span className="min-w-0">
+            <span className="block text-sm font-extrabold leading-tight text-[#6b4e24]">Latihan Harian</span>
+            <span className="block truncate text-[11px] font-bold text-[#9a7b4f]">{!latihanTersedia ? 'Selesaikan 1 stage dulu' : latihanHariIniSelesai ? 'Sudah hari ini ✓' : '2 menit'}</span>
           </span>
         </button>
-      )}
+        <button
+          onClick={() => {
+            pop()
+            onEvent()
+          }}
+          className={`panel-game flex items-center gap-2 px-2 py-2 text-left ${!harian.diklaim.includes('event') ? 'animate-denyut' : ''}`}
+        >
+          <span className="tombol-game jeruk flex h-10 w-10 shrink-0 items-center justify-center !rounded-xl text-xl">{EVENT_MINGGUAN[new Date().getDay()].ikon}</span>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-extrabold leading-tight text-[#6b4e24]">{EVENT_MINGGUAN[new Date().getDay()].judul}</span>
+            <span className="block truncate text-[11px] font-bold text-[#9a7b4f]">Event hari {EVENT_MINGGUAN[new Date().getDay()].hari}</span>
+          </span>
+        </button>
+      </div>
 
       {/* ===== DUNIA ===== */}
       <div className="relative -mt-24 w-full" style={{ aspectRatio: `${LEBAR} / ${TINGGI}` }}>
@@ -149,6 +167,11 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: P
                     <Nuri ukuran={70} ekspresi="senang" dipakai={p.dipakai} />
                   </span>
                 )}
+                {aktif && (
+                  <span className="absolute left-[4%] top-[20%]">
+                    <Peliharaan tahap={tahapPeliharaan(p.xp)} ukuran={52} className="animate-melayang" />
+                  </span>
+                )}
               </button>
 
               {/* papan nama kayu */}
@@ -176,10 +199,26 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: P
         })}
       </div>
 
+      {apresiasiBaru && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6">
+          <Konfeti />
+          <div className="panel-game animate-putar-masuk w-full max-w-xs p-6 text-center">
+            <div className="text-sm font-extrabold text-[#b89b6a]">💌 PESAN DARI AYAH / BUNDA</div>
+            <div className="my-2 text-7xl">{apresiasiBaru.stiker}</div>
+            <div className="text-xl font-extrabold leading-snug text-[#6b4e24]">{apresiasiBaru.pesan}</div>
+            <div className="mt-2 font-extrabold text-[#9a6a00]">🪙 +20 koin</div>
+            <button onClick={bacaApresiasi} className="tombol-game jeruk mt-4 w-full py-3 text-xl">
+              Terima kasih! 🤗
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ===== MENU BAWAH ===== */}
-      <div className="sticky bottom-0 z-30 grid grid-cols-3 gap-3 bg-gradient-to-t from-[#1f97c6] via-[#1f97c6]/85 to-transparent px-4 pb-4 pt-8">
-        <TombolMenu onClick={onLemari} label="Lemari Nuri" ikon={<IkonLemari ukuran={34} />} />
-        <TombolMenu onClick={onMisi} label="Misi Hari Ini" ikon={<IkonMisi ukuran={34} />} titik={!misiHariIniSelesai} />
+      <div className="sticky bottom-0 z-30 grid grid-cols-4 gap-2 bg-gradient-to-t from-[#1f97c6] via-[#1f97c6]/85 to-transparent px-4 pb-4 pt-8">
+        <TombolMenu onClick={onRumah} label="Rumahku" ikon={<span className="text-[28px] leading-[34px]">🏡</span>} />
+        <TombolMenu onClick={onMisi} label="Misi Hari Ini" ikon={<IkonMisi ukuran={34} />} titik={misiBelumDiambil} />
+        <TombolMenu onClick={onKoleksi} label="Koleksi" ikon={<span className="text-[28px] leading-[34px]">🏅</span>} />
         <TombolMenu onClick={onOrtu} label="Orang Tua" ikon={<IkonOrangTua ukuran={34} />} />
       </div>
     </div>
@@ -188,7 +227,7 @@ export default function Peta({ onPulau, onLemari, onMisi, onOrtu, onLatihan }: P
 
 function TombolMenu({ onClick, label, ikon, titik }: { onClick: () => void; label: string; ikon: React.ReactNode; titik?: boolean }) {
   return (
-    <button onClick={onClick} className="tombol-game krem relative flex flex-col items-center py-2 text-sm">
+    <button onClick={onClick} className="tombol-game krem relative flex flex-col items-center px-1 py-2 text-[12px] leading-tight">
       {ikon}
       <span className="relative">{label}</span>
       {titik && <span className="absolute -right-1 -top-1 h-5 w-5 rounded-full border-2 border-white bg-[#ff6b6b] shadow" />}

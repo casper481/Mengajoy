@@ -25,7 +25,7 @@ export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: P
 
   const [langkah, setLangkah] = useState(0)
   const [salah, setSalah] = useState(0)
-  const [hasil, setHasil] = useState<{ bintang: number; hadiah: string | null; tamat: boolean } | null>(null)
+  const [hasil, setHasil] = useState<{ bintang: number; hadiah: string | null; tamat: boolean; koin: number; xp: number } | null>(null)
 
   const namaAktivitas = [
     'Kenalan',
@@ -43,13 +43,13 @@ export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: P
     }
     const bintang = hitungBintang(total)
     const tamat = !p.tamatDilihat && STAGES.every((x) => x.id === stageId || (p.bintang[x.id] ?? 0) > 0)
-    const hadiah = selesaiStage(stageId, bintang)
-    setHasil({ bintang, hadiah, tamat })
+    const r = selesaiStage(stageId, bintang)
+    setHasil({ bintang, hadiah: r.hadiah, tamat, koin: r.koin, xp: r.xp })
     setLangkah(3)
     setTimeout(perayaan, 200)
   }
 
-  if (langkah === 3 && hasil) return <Perayaan bintang={hasil.bintang} hadiahId={hasil.hadiah} pulauSelesai={pulauSelesai} onLanjut={hasil.tamat ? onTamat : onKembali} tamat={hasil.tamat} onUlang={onUlang} />
+  if (langkah === 3 && hasil) return <Perayaan bintang={hasil.bintang} koin={hasil.koin} xp={hasil.xp} hadiahId={hasil.hadiah} pulauSelesai={pulauSelesai} onLanjut={hasil.tamat ? onTamat : onKembali} tamat={hasil.tamat} onUlang={onUlang} />
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden">
@@ -77,7 +77,7 @@ export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: P
   )
 }
 
-function Perayaan({ bintang, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }: { bintang: number; hadiahId: string | null; pulauSelesai: boolean; tamat: boolean; onLanjut: () => void; onUlang: () => void }) {
+function Perayaan({ bintang, koin, xp, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }: { bintang: number; koin: number; xp: number; hadiahId: string | null; pulauSelesai: boolean; tamat: boolean; onLanjut: () => void; onUlang: () => void }) {
   const { p } = useProgres()
   const hadiah = hadiahId ? hadiahById(hadiahId) : null
   // tampilkan Nuri memakai hadiah barunya
@@ -92,8 +92,12 @@ function Perayaan({ bintang, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }:
         <div className="panel-game mt-3 px-4 py-1.5 text-lg font-extrabold text-[#6b4e24]">{pulauSelesai ? '🏝️ Pulau selesai! Pulau berikutnya terbuka!' : 'Stage selesai!'}</div>
       </div>
 
-      <div className="relative z-10 drop-shadow-[0_4px_0_rgba(0,0,0,0.12)]">
+      <div className="relative z-10 flex flex-col items-center drop-shadow-[0_4px_0_rgba(0,0,0,0.12)]">
         <BarisBintang jumlah={bintang} ukuran={76} animasi />
+        <div className="animate-masuk mt-2 flex gap-2" style={{ animationDelay: '1.2s' }}>
+          <span className="rounded-full border-2 border-white bg-[#164d73]/80 px-3 py-1 font-extrabold text-white">🪙 +{koin}</span>
+          <span className="rounded-full border-2 border-white bg-[#164d73]/80 px-3 py-1 font-extrabold text-white">⭐ +{xp} XP</span>
+        </div>
       </div>
 
       <div className="relative flex flex-col items-center">

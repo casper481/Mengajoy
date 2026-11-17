@@ -6,13 +6,13 @@ import { HADIAH } from '../data/hadiah'
 import { pop } from '../lib/efekSuara'
 import { useProgres } from '../lib/progres'
 
-export default function Lemari({ onKembali }: { onKembali: () => void }) {
+export default function Lemari({ onKembali, tanpaBar = false }: { onKembali?: () => void; tanpaBar?: boolean }) {
   const { p, pakai } = useProgres()
   const jumlah = p.hadiah.length
 
   return (
     <div className="flex min-h-full flex-col">
-      <BarAtas onKembali={onKembali} judul="Lemari Nuri" />
+      {!tanpaBar && <BarAtas onKembali={onKembali} judul="Lemari Nuri" />}
       <div className="flex flex-col items-center px-4">
         <div className="relative">
           <div className="absolute bottom-1 left-1/2 h-5 w-28 -translate-x-1/2 rounded-[50%] bg-black/10 blur-[2px]" />

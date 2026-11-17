@@ -79,6 +79,26 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ Tutup browser lalu buka lagi → progres, bintang, dan hadiah masih ada
 - ☐ Coba juga di laptop
 
+## L. Dunia Mengajoy (karakter, pulau, Momo, koin)
+- ☐ Mulai dari nol: setelah **Mulai Petualangan** muncul **Buat Karakter** (kulit, rambut, peci/hijab, baju) → Selesai → peta
+- ☐ Bar atas: ⭐ level + bar XP, 🔥 api, 🪙 koin. Selesaikan stage → layar perayaan menampilkan **+koin** dan **+XP**
+- ☐ **Rumahku**: karakter & Momo berdiri di pulau. Ketuk tanda **+** → pilih/beli dekorasi dengan koin. Tempat bertanda "Lv" terbuka saat naik level
+- ☐ Ketuk **Momo** → nama bisa diganti, terlihat tahap tumbuhnya (Telur → Menetas → Kecil → Remaja → Bersayap)
+- ☐ Alat Uji Coba → **⭐ Tambah 300 XP** beberapa kali → level naik, Momo berubah, kartu ilmu & tempat dekorasi terbuka
+- ☐ Alat Uji Coba → **🪙 Tambah 500 koin** → beli dekorasi di Rumahku
+
+## M. Misi harian, streak, event
+- ☐ **Misi Hari Ini**: 3 misi belajar (+koin, ±menit). Tombol **Mulai** membawa ke tempat yang tepat; setelah selesai → **Ambil**. Ketiga misi diambil → buka 🎁 bonus
+- ☐ Misi dunia nyata masih ada di bawahnya (dikonfirmasi orang tua)
+- ☐ Ketuk **🔥** di bar atas → **Perjalanan Api**: hadiah hari 1, 3, 7, 14, 30. Gunakan "Lompat ke hari berikutnya" + belajar untuk menaikkan api
+- ☐ Terlewat 1 hari (lompat 2× tanpa belajar) → api tetap lanjut (dijaga Nuri, sekali seminggu)
+- ☐ Kartu **Event** di peta: tantangan berbeda tiap hari (Senin huruf … Minggu peti pekan). Selesai → **Ambil hadiah**
+
+## N. Koleksi & orang tua
+- ☐ **Koleksi**: Lemari Nuri, Lencana (15), Kartu Ilmu (terbuka 1 per level; ketuk untuk membaca)
+- ☐ Orang Tua → **Laporan 7 hari** (grafik menit per hari)
+- ☐ Orang Tua → **Kirim apresiasi** (stiker + pesan) → kembali ke peta → pesan muncul untuk anak (+20 koin)
+
 ---
 
 **Catat yang tidak sesuai**: nomor bagian + apa yang terjadi + (kalau bisa) tangkapan layar. Kirim ke Claude untuk diperbaiki.

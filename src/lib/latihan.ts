@@ -65,8 +65,11 @@ export function buatLatihanHarian(
   bintang: Record<string, number>,
   statistik: Record<string, { b: number; s: number }>,
   jumlah = 6,
+  pulau?: number[],
 ): SoalLatihan[] {
-  const kumpulan = STAGES.filter((s) => (bintang[s.id] ?? 0) > 0).flatMap(entriStage)
+  const selesai = STAGES.filter((s) => (bintang[s.id] ?? 0) > 0)
+  const terpilih0 = pulau ? selesai.filter((s) => pulau.includes(s.pulau)) : selesai
+  const kumpulan = (terpilih0.length ? terpilih0 : selesai).flatMap(entriStage)
   const sisa = [...kumpulan]
   const terpilih: Entri[] = []
   while (terpilih.length < jumlah && sisa.length) {
