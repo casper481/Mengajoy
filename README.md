@@ -82,7 +82,7 @@ Semua aturan (harga dekorasi, hadiah streak, tahap Momo, isi kartu ilmu, event) 
 
 ## Yang bisa dicoba
 
-Daftar cek lengkap langkah demi langkah ada di **[PANDUAN-UJI.md](PANDUAN-UJI.md)**. Di Area Orang Tua tersedia **🧪 Alat Uji Coba** untuk mencoba fitur yang bergantung waktu (streak, misi harian, batas waktu, sertifikat) tanpa menunggu.
+Daftar cek lengkap langkah demi langkah ada di **[PANDUAN-UJI.md](PANDUAN-UJI.md)**. Semua pulau, hadiah, dan sertifikat hanya terbuka lewat progres belajar yang sebenarnya.
 
 
 | Fitur | Cara mencoba |
@@ -102,7 +102,6 @@ Daftar cek lengkap langkah demi langkah ada di **[PANDUAN-UJI.md](PANDUAN-UJI.md
 | **Latihan Harian** | Kartu di atas peta (muncul setelah 1 stage selesai): 6 soal acak dari bacaan yang sudah dipelajari. Bacaan yang sering salah lebih sering muncul |
 | **Perayaan tamat** | Setelah semua stage Level 1–5 selesai: tombol "🎓 Ada kejutan!" → Nuri wisuda + **sertifikat** bernama anak yang bisa diunduh (PNG) |
 | Perlu diulang | Di Area Orang Tua: daftar bacaan yang sering salah di Latihan Harian |
-| **Mode coba** | Di Area Orang Tua, nyalakan "Mode coba: buka semua stage" untuk langsung mencoba semua pulau atau memeriksa materi bersama ustaz |
 
 ---
 
@@ -174,5 +173,4 @@ mengajoy/
 - [ ] Bisa dipasang di layar HP seperti app (PWA) dan bisa dipakai offline sepenuhnya.
 - [ ] Uji coba dengan anak sungguhan, termasuk ukuran tombol dan kecepatan animasi.
 - [ ] Desain Nuri yang lebih final oleh ilustrator.
-- [ ] Hapus **Alat Uji Coba** dan **Mode coba** sebelum dirilis ke anak-anak.
 - [ ] Pemeriksaan merek "Mengajoy" di PDKI DJKI dan pendaftaran domain.

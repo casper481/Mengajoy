@@ -19,7 +19,6 @@ export type Progres = {
   waktu: { tanggal: string; detikHariIni: number; totalDetik: number }
   batasMenit: 15 | 30 | 45
   efekSuara: boolean
-  modeDemo: boolean // buka semua stage (untuk mencoba / ustaz memeriksa)
   namaAnak: string // untuk sertifikat
   tamatDilihat: boolean // layar perayaan tamat sudah pernah tampil
   latihan: { tanggal: string | null; total: number } // latihan harian
@@ -65,7 +64,6 @@ export const PROGRES_AWAL: Progres = {
   waktu: { tanggal: hariIni(), detikHariIni: 0, totalDetik: 0 },
   batasMenit: 30,
   efekSuara: true,
-  modeDemo: false,
   namaAnak: '',
   tamatDilihat: false,
   latihan: { tanggal: null, total: 0 },
@@ -91,6 +89,7 @@ export function muat(): Progres {
     const teks = localStorage.getItem(KUNCI)
     if (!teks) return structuredClone(PROGRES_AWAL)
     const data = JSON.parse(teks) as Partial<Progres>
+    delete (data as Record<string, unknown>).modeDemo // jalan pintas uji coba sudah dihapus
     return {
       ...structuredClone(PROGRES_AWAL),
       ...data,

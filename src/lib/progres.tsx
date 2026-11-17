@@ -4,13 +4,11 @@
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { DEKORASI, HADIAH_BELAJAR, HADIAH_STREAK, dekorasiById, levelDariXp, xpUntukLevel, type DataAvatar } from '../data/dunia'
-import { HADIAH, hadiahById, type Slot } from '../data/hadiah'
+import { hadiahById, type Slot } from '../data/hadiah'
 import { STAGES, stageById } from '../data/stages'
 import { hapusSemua, harianBaru, muat, PROGRES_AWAL, simpan, type Harian, type Progres } from './simpan'
 import { hariIni, kemarin } from './tanggal'
 import { setEfekAktif } from './efekSuara'
-
-export type AksiUji = 'tamatkan-semua' | 'hampir-tamat' | 'habiskan-waktu' | 'reset-waktu' | 'hari-berikutnya' | 'tambah-koin' | 'tambah-xp'
 
 const hariLalu = (n: number) => {
   const d = new Date()
@@ -51,7 +49,6 @@ type Aksi = {
   tambahWaktu: (detik: number) => void
   setBatas: (m: 15 | 30 | 45) => void
   setEfek: (v: boolean) => void
-  setDemo: (v: boolean) => void
   setNama: (nama: string) => void
   tandaiTamat: () => void
   catatLatihan: (hasil: { kunci: string; salah: number }[]) => void
@@ -69,7 +66,6 @@ type Aksi = {
   klaimPekan: (koin: number) => void
   setTampilan: (t: 'otomatis' | '3d' | '2d') => void
   reset: () => void
-  uji: (aksi: AksiUji) => void
   // nilai turunan
   streakAktif: number
   totalBintang: number
@@ -167,7 +163,6 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
 
   const setBatas = useCallback((m: 15 | 30 | 45) => setP((s) => ({ ...s, batasMenit: m })), [])
   const setEfek = useCallback((v: boolean) => setP((s) => ({ ...s, efekSuara: v })), [])
-  const setDemo = useCallback((v: boolean) => setP((s) => ({ ...s, modeDemo: v })), [])
   const setNama = useCallback((nama: string) => setP((s) => ({ ...s, namaAnak: nama.slice(0, 30) })), [])
   const tandaiTamat = useCallback(() => setP((s) => (s.tamatDilihat ? s : { ...s, tamatDilihat: true })), [])
 
@@ -257,48 +252,6 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const setTampilan = useCallback((t: 'otomatis' | '3d' | '2d') => setP((s) => ({ ...s, tampilan: t })), [])
-  const uji = useCallback((aksi: AksiUji) => {
-    setP((s) => {
-      const hi = hariIni()
-      const semua = (kecuali?: string) => Object.fromEntries(STAGES.filter((x) => x.id !== kecuali).map((x) => [x.id, 3]))
-      switch (aksi) {
-        case 'tamatkan-semua':
-          return { ...s, bintang: semua(), hadiah: HADIAH.map((h) => h.id), tamatDilihat: false }
-        case 'hampir-tamat': {
-          const terakhir = STAGES[STAGES.length - 1]
-          return { ...s, bintang: semua(terakhir.id), tamatDilihat: false, modeDemo: false }
-        }
-        case 'habiskan-waktu':
-          return { ...s, waktu: { ...s.waktu, tanggal: hi, detikHariIni: s.batasMenit * 60 } }
-        case 'reset-waktu':
-          return { ...s, waktu: { ...s.waktu, tanggal: hi, detikHariIni: 0 } }
-        case 'tambah-koin':
-          return { ...s, koin: s.koin + 500 }
-        case 'tambah-xp':
-          return { ...s, xp: s.xp + 300 }
-        case 'hari-berikutnya': {
-          // geser semua catatan "hari ini" menjadi "kemarin", seolah-olah sekarang sudah besok
-          const geser = (t: string | null) => (t === hi ? kemarin() : t)
-          const aktif = { ...s.aktif }
-          if (aktif[hi]) {
-            aktif[kemarin()] = (aktif[kemarin()] ?? 0) + aktif[hi]
-            delete aktif[hi]
-          }
-          return {
-            ...s,
-            aktif,
-            streak: { ...s.streak, terakhir: geser(s.streak.terakhir), jagaTerakhir: geser(s.streak.jagaTerakhir) },
-            misi: { ...s.misi, tanggal: geser(s.misi.tanggal) },
-            latihan: { ...s.latihan, tanggal: geser(s.latihan.tanggal) },
-            harian: { ...s.harian, tanggal: geser(s.harian.tanggal) ?? hi },
-            pekanDiklaim: geser(s.pekanDiklaim),
-            waktu: { ...s.waktu, tanggal: geser(s.waktu.tanggal) ?? hi, detikHariIni: 0 },
-          }
-        }
-      }
-    })
-  }, [])
-
   const reset = useCallback(() => {
     hapusSemua()
     setP({ ...structuredClone(PROGRES_AWAL), harian: harianBaru(), waktu: { tanggal: hariIni(), detikHariIni: 0, totalDetik: 0 } })
@@ -313,7 +266,6 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
     const totalBintang = Object.values(p.bintang).reduce((a, b) => a + b, 0)
     const detikHariIni = p.waktu.tanggal === hi ? p.waktu.detikHariIni : 0
     const stageTerbuka = (stageId: string) => {
-      if (p.modeDemo) return true
       const s = stageById(stageId)
       if (s.nomor === 1) {
         if (s.pulau === 1) return true
@@ -323,7 +275,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       return (p.bintang[sebelum.id] ?? 0) > 0
     }
     const pulauSelesai = (id: number) => STAGES.filter((x) => x.pulau === id).every((x) => (p.bintang[x.id] ?? 0) > 0)
-    const pulauTerbuka = (id: number) => p.modeDemo || id === 1 || pulauSelesai(id - 1)
+    const pulauTerbuka = (id: number) => id === 1 || pulauSelesai(id - 1)
     const level = levelDariXp(p.xp)
     const pekan = Array.from({ length: 7 }, (_, i) => hariLalu(i))
     return {
@@ -336,7 +288,6 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       tambahWaktu,
       setBatas,
       setEfek,
-      setDemo,
       setNama,
       tandaiTamat,
       catatLatihan,
@@ -353,7 +304,6 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       klaimPekan,
       setTampilan,
       reset,
-      uji,
       streakAktif,
       totalBintang,
       misiHariIniSelesai: p.misi.tanggal === hi,
@@ -371,7 +321,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       apresiasiBaru: p.apresiasi.find((a) => !a.dibaca) ?? null,
       hariAktifPekanIni: pekan.filter((t) => (p.aktif[t] ?? 0) > 0 || p.streak.terakhir === t).length,
     }
-  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, tandaiAyat, klaim, klaimStreak, beliDekorasi, pasangDekorasi, setAvatar, setNamaPeliharaan, kirimApresiasi, bacaApresiasi, selesaiEvent, klaimPekan, setTampilan, reset, uji])
+  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setNama, tandaiTamat, catatLatihan, tandaiAyat, klaim, klaimStreak, beliDekorasi, pasangDekorasi, setAvatar, setNamaPeliharaan, kirimApresiasi, bacaApresiasi, selesaiEvent, klaimPekan, setTampilan, reset])
 
   return <Ctx.Provider value={nilai}>{children}</Ctx.Provider>
 }

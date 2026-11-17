@@ -3,8 +3,7 @@
 Daftar cek untuk memastikan semua fitur sudah sesuai. Centang ☐ → ☑ saat sudah dicoba.
 Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 
-> **Alat bantu:** buka **Orang Tua** → jawab soal perkalian → gulir ke bawah ke **🧪 Alat Uji Coba**
-> dan **Mode coba: buka semua stage**. Keduanya dipakai di beberapa langkah di bawah.
+> Semua pulau, hadiah, streak, dan sertifikat **hanya terbuka lewat progres belajar yang sebenarnya**. Beberapa bagian (streak, misi esok hari, sertifikat) memang perlu dicoba selama beberapa hari belajar.
 
 ---
 
@@ -32,15 +31,14 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ Ketuk Peci Biru → dilepas; ketuk lagi → dipakai
 - ☐ Nuri di peta & layar lain ikut memakai aksesorisnya
 
-## E. Semua level (pakai Mode coba)
-- ☐ Orang Tua → nyalakan **Mode coba** → kembali ke peta: semua pulau terbuka
+## E. Semua level (terbuka berurutan sesuai progres)
+- ☐ Selesaikan semua stage Pulau 1 → Pulau 2 terbuka (begitu seterusnya)
 - ☐ **Level 2 Harakat**: kenalan fathah/kasrah/dhammah → Tebak Suara → **Susun Suku Kata** (salah harakat → Nuri memberi petunjuk yang tepat)
 - ☐ **Level 3 Menyambung**: memilih cara baca (misal كَتَبَ = ka-ta-ba)
 - ☐ **Level 4 Mad**: soal "pendek atau panjang?"
 - ☐ **Level 5 Tajwid**: contoh `نْ + ب` → pilih nama hukumnya
 - ☐ **Pulau Al-Quran**: 9 surat bisa dibuka. Di setiap surat: basmalah di atas (kecuali Al-Fatihah), **Ikuti per kata** menyorot kata satu per satu, **Aku sudah bisa** → konfirmasi orang tua → ayat berikutnya; setelah semua ayat → perayaan dan ✅ di daftar surat
 - ☐ **Minta ustaz memeriksa** tampilan teks ayat di HP (harakat, tanda waqaf, nomor ayat)
-- ☐ Matikan lagi Mode coba
 
 ## F. Latihan Harian
 - ☐ Setelah minimal 1 stage selesai, kartu **🔁 Latihan Harian** muncul di atas peta
@@ -51,19 +49,18 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 
 ## G. Streak & misi harian
 - ☐ Peta → **Misi Hari Ini** → **Sudah!** → muncul pertanyaan untuk orang tua → Ya, sudah → konfeti
-- ☐ Alat Uji Coba → **📅 Lompat ke hari berikutnya**
+- ☐ Keesokan harinya, buka app lagi
 - ☐ Misi dan Latihan Harian terbuka lagi (misinya berganti)
 - ☐ Selesaikan 1 stage atau latihan → angka 🔥 naik jadi 2
 
 ## H. Batas waktu
 - ☐ Orang Tua → pilih batas 15 / 30 / 45 menit
-- ☐ Alat Uji Coba → **⏰ Habiskan waktu hari ini** → kembali → layar malam "Hebat! Waktunya istirahat, sampai besok ya"
+- ☐ Pilih batas 15 menit lalu pakai app sampai waktunya habis → layar malam "Hebat! Waktunya istirahat, sampai besok ya"
 - ☐ Anak tidak bisa membuka aktivitas lain dari layar itu
-- ☐ Ketuk "Area orang tua" (kecil di bawah) → jawab soal → **↩️ Kembalikan waktu hari ini** → app bisa dipakai lagi
+- ☐ Ketuk "Area orang tua" (kecil di bawah) → orang tua masih bisa masuk dan mengubah batas waktu
 
 ## I. Tamat & sertifikat
-- ☐ Alat Uji Coba → **🎓 Hampir tamat (sisa 1 stage)**
-- ☐ Peta → Pulau Tajwid Dasar → stage 4 → mainkan sampai selesai
+- ☐ Selesaikan stage terakhir (Pulau Tajwid Dasar, stage 4)
 - ☐ Tombol berubah jadi **🎓 Ada kejutan!** → layar "MasyaAllah, tamat!" dengan Nuri bertopi wisuda
 - ☐ Ketik nama anak → nama muncul di sertifikat
 - ☐ **⬇ Simpan sertifikat** → gambar tersimpan di HP
@@ -84,14 +81,14 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ Bar atas: ⭐ level + bar XP, 🔥 api, 🪙 koin. Selesaikan stage → layar perayaan menampilkan **+koin** dan **+XP**
 - ☐ **Rumahku**: karakter & Momo berdiri di pulau. Ketuk tanda **+** → pilih/beli dekorasi dengan koin. Tempat bertanda "Lv" terbuka saat naik level
 - ☐ Ketuk **Momo** → nama bisa diganti, terlihat tahap tumbuhnya (Telur → Menetas → Kecil → Remaja → Bersayap)
-- ☐ Alat Uji Coba → **⭐ Tambah 300 XP** beberapa kali → level naik, Momo berubah, kartu ilmu & tempat dekorasi terbuka
-- ☐ Alat Uji Coba → **🪙 Tambah 500 koin** → beli dekorasi di Rumahku
+- ☐ Terus belajar → level naik, Momo tumbuh, kartu ilmu & tempat dekorasi baru terbuka
+- ☐ Kumpulkan koin dari belajar & misi → beli dekorasi di Rumahku
 
 ## M. Misi harian, streak, event
 - ☐ **Misi Hari Ini**: 3 misi belajar (+koin, ±menit). Tombol **Mulai** membawa ke tempat yang tepat; setelah selesai → **Ambil**. Ketiga misi diambil → buka 🎁 bonus
 - ☐ Misi dunia nyata masih ada di bawahnya (dikonfirmasi orang tua)
-- ☐ Ketuk **🔥** di bar atas → **Perjalanan Api**: hadiah hari 1, 3, 7, 14, 30. Gunakan "Lompat ke hari berikutnya" + belajar untuk menaikkan api
-- ☐ Terlewat 1 hari (lompat 2× tanpa belajar) → api tetap lanjut (dijaga Nuri, sekali seminggu)
+- ☐ Ketuk **🔥** di bar atas → **Perjalanan Api**: hadiah hari 1, 3, 7, 14, 30 (terbuka sesuai jumlah hari belajar berturut-turut)
+- ☐ Terlewat belajar 1 hari → api tetap lanjut (dijaga Nuri, sekali seminggu)
 - ☐ Kartu **Event** di peta: tantangan berbeda tiap hari (Senin huruf … Minggu peti pekan). Selesai → **Ambil hadiah**
 
 ## N. Koleksi & orang tua
@@ -105,7 +102,7 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ Ketuk peti berkilau di Pulau Rumahku → koin memancar, "+10 🪙" (sekali sehari)
 - ☐ Ketuk avatar (melompat + hati), Momo (bereaksi), Nuri (mengajak ke pulau aktif)
 - ☐ Selesaikan pulau → saat kembali ke peta, kamera terbang ke pulau baru & awan menghilang
-- ☐ Alat Uji Coba → Tambah XP → kembali ke peta: telur Momo menetas / Momo tumbuh
+- ☐ Saat XP cukup, kembali ke peta: telur Momo menetas / Momo tumbuh
 - ☐ Rumahku 3D: dekorasi tampil 3D; ketuk "+" untuk memasang; tombol Elus / Beri makan / Main bola
 - ☐ Selesaikan stage → perayaan 3D (peti terbuka bila ada hadiah, Nuri memakai aksesorisnya)
 - ☐ Perhatikan kelancaran di HP. Bila berat/panas → pilih "Peta 2D"

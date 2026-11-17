@@ -160,7 +160,7 @@ export default function Dunia3D(props: Props) {
     const jumlahTerbuka = PULAU.filter((x) => pulauTerbuka(x.id)).length
     const dulu = bacaAngka('mengajoy:pulau-terlihat')
     const timers: number[] = []
-    if (dulu !== null && jumlahTerbuka > dulu && !p.modeDemo) {
+    if (dulu !== null && jumlahTerbuka > dulu) {
       const id = PULAU.filter((x) => pulauTerbuka(x.id))[jumlahTerbuka - 1].id
       timers.push(window.setTimeout(() => {
         const pl = DUNIA[id]
@@ -176,7 +176,7 @@ export default function Dunia3D(props: Props) {
       }, 2000))
       timers.push(window.setTimeout(() => setMembuka(null), 4200))
     }
-    if (!p.modeDemo) simpanAngka('mengajoy:pulau-terlihat', jumlahTerbuka)
+    simpanAngka('mengajoy:pulau-terlihat', jumlahTerbuka)
 
     const tahapDulu = bacaAngka('mengajoy:tahap-momo')
     if (tahapDulu !== null && tahap > tahapDulu) {
