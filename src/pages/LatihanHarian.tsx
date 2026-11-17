@@ -20,7 +20,7 @@ export default function LatihanHarian({ onKembali }: { onKembali: () => void }) 
       <div className="flex min-h-full flex-col items-center justify-center gap-4 p-6 text-center">
         <Nuri ukuran={150} ekspresi="mikir" dipakai={p.dipakai} />
         <div className="text-xl font-extrabold">Selesaikan satu stage dulu, nanti kita latihan bersama!</div>
-        <button onClick={onKembali} className="tombol bg-daun px-8 py-3 text-xl text-white">Kembali</button>
+        <button onClick={onKembali} className="tombol-game px-8 py-3 text-xl">Kembali</button>
       </div>
     )
   }
@@ -43,7 +43,7 @@ export default function LatihanHarian({ onKembali }: { onKembali: () => void }) 
           <IkonApi ukuran={32} /> {streakAktif} hari berturut-turut!
         </div>
         <div className="text-center font-bold text-slate-600">Mengulang itu kunci supaya tidak lupa. Sampai besok, ya!</div>
-        <button onClick={onKembali} className="tombol w-full max-w-sm bg-daun py-4 text-2xl text-white">Kembali ke peta</button>
+        <button onClick={onKembali} className="tombol-game w-full max-w-sm py-4 text-2xl">Kembali ke peta</button>
       </div>
     )
   }

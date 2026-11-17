@@ -36,7 +36,7 @@ export default function Misi({ onKembali }: { onKembali: () => void }) {
 
       {!misiHariIniSelesai && (
         <div className="p-4">
-          <button onClick={() => setTanya(true)} className="tombol w-full bg-daun py-5 text-3xl text-white">
+          <button onClick={() => setTanya(true)} className="tombol-game w-full py-5 text-3xl">
             Sudah!
           </button>
         </div>
@@ -56,7 +56,7 @@ export default function Misi({ onKembali }: { onKembali: () => void }) {
                   setRayakan(true)
                   sorak()
                 }}
-                className="tombol bg-daun py-3 text-lg text-white"
+                className="tombol-game py-3 text-lg"
               >
                 Ya, sudah ✓
               </button>

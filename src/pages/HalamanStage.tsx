@@ -54,13 +54,13 @@ export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: P
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden">
       <div className="flex shrink-0 items-center gap-3 px-4 pt-3 pb-2">
-        <button onClick={onKembali} aria-label="Tutup" className="tombol flex h-12 w-12 items-center justify-center bg-white text-2xl font-extrabold">
+        <button onClick={onKembali} aria-label="Tutup" className="tombol-game merah flex h-12 w-12 shrink-0 items-center justify-center !rounded-full text-2xl">
           ✕
         </button>
         <div className="flex flex-1 gap-2">
           {namaAktivitas.map((n, i) => (
             <div key={n} className="flex-1">
-              <div className={`h-3 rounded-full ${i < langkah ? 'bg-daun' : i === langkah ? 'bg-bintang' : 'bg-white'}`} />
+              <div className={`h-4 rounded-full border-2 border-white shadow-[0_2px_0_rgba(0,0,0,0.12)] ${i < langkah ? 'bg-daun' : i === langkah ? 'bg-bintang' : 'bg-white/70'}`} />
               <div className={`mt-0.5 truncate text-center text-[11px] font-bold ${i === langkah ? 'text-tinta' : 'text-slate-400'}`}>{n}</div>
             </div>
           ))}
@@ -85,30 +85,37 @@ function Perayaan({ bintang, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }:
   return (
     <div className="relative flex min-h-full flex-col items-center justify-between overflow-hidden px-6 py-8">
       <Konfeti />
-      <div className="animate-masuk text-center">
-        <div className="text-5xl font-extrabold text-tinta">Hebat!</div>
-        <div className="text-xl font-bold text-slate-600">{pulauSelesai ? '🏝️ Pulau selesai! Pulau berikutnya terbuka!' : 'Stage selesai!'}</div>
+      <div className="animate-masuk relative z-10 text-center">
+        <div className="judul-game text-6xl" style={{ ['--g' as string]: '#b4520e', color: '#ffc163' }}>
+          Hebat!
+        </div>
+        <div className="panel-game mt-3 px-4 py-1.5 text-lg font-extrabold text-[#6b4e24]">{pulauSelesai ? '🏝️ Pulau selesai! Pulau berikutnya terbuka!' : 'Stage selesai!'}</div>
       </div>
 
-      <BarisBintang jumlah={bintang} ukuran={72} animasi />
+      <div className="relative z-10 drop-shadow-[0_4px_0_rgba(0,0,0,0.12)]">
+        <BarisBintang jumlah={bintang} ukuran={76} animasi />
+      </div>
 
-      <div className="flex flex-col items-center">
-        <div className="animate-lompat">
-          <Nuri ukuran={180} ekspresi="sorak" dipakai={dipakai} />
+      <div className="relative flex flex-col items-center">
+        <div className="sinar left-1/2 top-[38%]" style={{ marginLeft: -260, marginTop: -260 }} />
+        <div className="animate-lompat relative">
+          <Nuri ukuran={190} ekspresi="sorak" dipakai={dipakai} />
         </div>
         {hadiah ? (
-          <div className="animate-masuk mt-2 rounded-3xl bg-white px-6 py-3 text-center shadow-lg" style={{ animationDelay: '1.4s' }}>
-            <div className="text-sm font-bold text-slate-500">🎁 Hadiah baru untuk Nuri!</div>
-            <div className="text-2xl font-extrabold text-jeruk">{hadiah.nama}</div>
+          <div className="panel-game animate-masuk relative mt-2 px-6 py-3 text-center" style={{ animationDelay: '1.4s' }}>
+            <div className="text-sm font-extrabold text-[#9a7b4f]">🎁 Hadiah baru untuk Nuri!</div>
+            <div className="judul-game text-2xl" style={{ ['--g' as string]: '#b4520e', color: '#ffb347' }}>
+              {hadiah.nama}
+            </div>
           </div>
         ) : (
-          <div className="mt-2 rounded-3xl bg-white px-6 py-3 text-center text-lg font-bold shadow">Nuri senang kamu berlatih lagi!</div>
+          <div className="panel-game relative mt-2 px-6 py-3 text-center text-lg font-extrabold text-[#6b4e24]">Nuri senang kamu berlatih lagi!</div>
         )}
       </div>
 
-      <div className="flex w-full max-w-sm flex-col gap-3">
-        <button onClick={onLanjut} className={`tombol w-full py-4 text-2xl text-white ${tamat ? 'animate-denyut bg-jeruk' : 'bg-daun'}`}>{tamat ? '🎓 Ada kejutan!' : 'Lanjut ➜'}</button>
-        <button onClick={onUlang} className="tombol w-full bg-white py-3 text-lg">Main lagi</button>
+      <div className="relative z-10 flex w-full max-w-sm flex-col gap-3">
+        <button onClick={onLanjut} className={`tombol-game w-full py-4 text-2xl ${tamat ? 'jeruk animate-denyut' : ''}`}>{tamat ? '🎓 Ada kejutan!' : 'Lanjut ➜'}</button>
+        <button onClick={onUlang} className="tombol-game krem w-full py-3 text-lg">Main lagi</button>
       </div>
     </div>
   )

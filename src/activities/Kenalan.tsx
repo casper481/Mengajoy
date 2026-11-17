@@ -47,7 +47,7 @@ export default function Kenalan({ items, harakat, onSelesai }: Props) {
           )}
         </div>
         <div className="shrink-0 p-4">
-          <button onClick={lanjut} className="tombol w-full bg-daun py-4 text-2xl text-white">Lanjut ➜</button>
+          <button onClick={lanjut} className="tombol-game w-full py-4 text-2xl">Lanjut ➜</button>
         </div>
       </div>
     )
@@ -100,7 +100,7 @@ export default function Kenalan({ items, harakat, onSelesai }: Props) {
             <span key={i} className={`h-3 w-3 rounded-full ${i <= idx ? 'bg-daun' : 'bg-white'}`} />
           ))}
         </div>
-        <button onClick={lanjut} className="tombol flex-[2] bg-daun py-4 text-2xl text-white">
+        <button onClick={lanjut} className="tombol-game flex-[2] py-4 text-2xl">
           {idx + 1 >= total ? 'Main yuk! ➜' : 'Lanjut ➜'}
         </button>
       </div>

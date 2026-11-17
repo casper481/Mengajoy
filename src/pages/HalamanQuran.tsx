@@ -37,7 +37,7 @@ export default function HalamanQuran({ onKembali, onSertifikat, onSurat }: { onK
 
       {semuaTamat && (
         <div className="mx-4 mt-3">
-          <button onClick={onSertifikat} className="tombol w-full bg-jeruk py-3 text-xl text-white">🎓 Lihat sertifikatku</button>
+          <button onClick={onSertifikat} className="tombol-game jeruk w-full py-3 text-xl">🎓 Lihat sertifikatku</button>
         </div>
       )}
 
@@ -80,7 +80,7 @@ export default function HalamanQuran({ onKembali, onSertifikat, onSurat }: { onK
             <div className="text-4xl">🌙</div>
             <div className="mt-2 text-xl font-extrabold">Surat {info}</div>
             <div className="mt-1 font-bold text-slate-600">Sedang disiapkan. Sabar ya, sebentar lagi!</div>
-            <button className="tombol mt-4 w-full bg-daun py-3 text-lg text-white">Oke!</button>
+            <button className="tombol-game mt-4 w-full py-3 text-lg">Oke!</button>
           </div>
         </div>
       )}

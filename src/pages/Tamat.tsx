@@ -42,7 +42,7 @@ export default function Tamat({ onQuran, onKembali }: { onQuran: () => void; onK
           />
         </label>
         <Sertifikat nama={p.namaAnak} />
-        <button onClick={onQuran} className="tombol w-full bg-daun py-4 text-2xl text-white">
+        <button onClick={onQuran} className="tombol-game w-full py-4 text-2xl">
           📖 Ke Pulau Al-Quran
         </button>
       </div>

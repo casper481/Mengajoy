@@ -84,12 +84,12 @@ button {
 .tombol {
   border-radius: 1.5rem;
   font-weight: 800;
-  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 0 #d6c6a2, 0 10px 18px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.04);
   transition: transform 0.08s, box-shadow 0.08s;
 }
 .tombol:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 0 #d6c6a2;
 }
 
 /* Kartu memory: efek balik */
@@ -151,4 +151,119 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ================= GAYA GAME ================= */
+
+/* Tombol game mengilap: warna diatur lewat --w (atas), --w2 (bawah), --g (garis) */
+.tombol-game {
+  --w: #7ee081;
+  --w2: #3fb24f;
+  --g: #2a7a36;
+  position: relative;
+  border-radius: 1.4rem;
+  border: 3px solid var(--g);
+  background: linear-gradient(180deg, var(--w) 0%, var(--w2) 100%);
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 2px 0 var(--g), 0 0 2px var(--g);
+  box-shadow: 0 6px 0 var(--g), 0 10px 16px rgba(0, 0, 0, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.tombol-game::before {
+  /* kilau di bagian atas */
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 4px;
+  height: 38%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.tombol-game:active {
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 var(--g), 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+.tombol-game.jeruk { --w: #ffc163; --w2: #ff8a2b; --g: #b4520e; }
+.tombol-game.biru { --w: #7fd6ff; --w2: #2fa6e8; --g: #1a6c9e; }
+.tombol-game.ungu { --w: #c9a8ff; --w2: #8b63e8; --g: #5534a8; }
+.tombol-game.merah { --w: #ff9aa8; --w2: #f0576e; --g: #a62a40; }
+.tombol-game.krem { --w: #fffaf0; --w2: #f3e3c3; --g: #b89b6a; color: #6b4e24; text-shadow: none; }
+.tombol-game.batu { --w: #f4efe6; --w2: #d9cdb8; --g: #9a8a6e; color: #5d4b2c; text-shadow: none; }
+.tombol-game:disabled { filter: grayscale(0.8) brightness(0.95); }
+
+/* Teks judul bergaris tebal ala game */
+.judul-game {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow:
+    0 3px 0 var(--g, #2b3a67), 3px 0 0 var(--g, #2b3a67), -3px 0 0 var(--g, #2b3a67), 0 -3px 0 var(--g, #2b3a67),
+    2px 2px 0 var(--g, #2b3a67), -2px 2px 0 var(--g, #2b3a67), 2px -2px 0 var(--g, #2b3a67), -2px -2px 0 var(--g, #2b3a67),
+    0 7px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Panel ala game: krem dengan bingkai tebal */
+.panel-game {
+  border-radius: 1.75rem;
+  background: linear-gradient(180deg, #fffdf7 0%, #fff4dc 100%);
+  border: 4px solid #e9c98f;
+  box-shadow: 0 6px 0 #c9a467, 0 14px 24px rgba(0, 0, 0, 0.15), inset 0 2px 0 #fff;
+}
+.panel-biru {
+  border-radius: 1.75rem;
+  background: linear-gradient(180deg, #eaf8ff 0%, #c9ecff 100%);
+  border: 4px solid #8fd0f4;
+  box-shadow: 0 6px 0 #5aaedc, 0 14px 24px rgba(0, 0, 0, 0.15), inset 0 2px 0 #fff;
+}
+
+/* Sinar berputar di belakang perayaan */
+.sinar {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgba(255, 236, 160, 0.75) 0deg 12deg, rgba(255, 255, 255, 0) 12deg 24deg);
+  -webkit-mask-image: radial-gradient(circle, #000 25%, transparent 70%);
+  mask-image: radial-gradient(circle, #000 25%, transparent 70%);
+  animation: putar 22s linear infinite;
+  pointer-events: none;
+}
+@keyframes putar {
+  to { transform: rotate(360deg); }
+}
+
+/* Ombak bergerak */
+.ombak {
+  animation: ombak 7s linear infinite;
+}
+@keyframes ombak {
+  from { transform: translateX(0); }
+  to { transform: translateX(-80px); }
+}
+.goyang-pelan {
+  animation: goyang-pelan 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  transform-box: fill-box;
+}
+@keyframes goyang-pelan {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+.kilau {
+  animation: kilau 2.4s ease-in-out infinite;
+}
+@keyframes kilau {
+  0%, 100% { opacity: 0.2; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.awan-jalan {
+  animation: awan-jalan 60s linear infinite;
+}
+@keyframes awan-jalan {
+  from { transform: translateX(-30%); }
+  to { transform: translateX(130%); }
 }

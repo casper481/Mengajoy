@@ -18,6 +18,7 @@ import Lemari from './pages/Lemari'
 import Misi from './pages/Misi'
 import Peta from './pages/Peta'
 import Sambutan from './pages/Sambutan'
+import LatarLembut from './components/dunia/LatarLembut'
 
 type Layar =
   | { nama: 'sambutan' }
@@ -121,8 +122,9 @@ export default function App() {
   }
 
   return (
-    <div ref={atas} className="mx-auto flex min-h-full w-full max-w-md flex-col">
-      {isi}
+    <div ref={atas} className="relative mx-auto flex min-h-full w-full max-w-md flex-col">
+      {!istirahat && !['sambutan', 'peta'].includes(layar.nama) && !(layar.nama === 'pulau' && layar.id !== 6) && <LatarLembut />}
+      <div className="relative z-10 flex min-h-full flex-1 flex-col">{isi}</div>
     </div>
   )
 }

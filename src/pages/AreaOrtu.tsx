@@ -111,7 +111,7 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
             />
           </label>
           {semuaTamat ? (
-            <button onClick={onSertifikat} className="tombol mt-3 w-full bg-jeruk py-3 text-lg text-white">🎓 Lihat & simpan sertifikat</button>
+            <button onClick={onSertifikat} className="tombol-game jeruk mt-3 w-full py-3 text-lg">🎓 Lihat & simpan sertifikat</button>
           ) : (
             <div className="mt-2 text-sm text-slate-500">Sertifikat terbuka setelah ananda menyelesaikan semua stage Level 1–5.</div>
           )}

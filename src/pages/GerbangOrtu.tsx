@@ -35,7 +35,7 @@ export default function GerbangOrtu({ onLolos, onKembali }: { onLolos: () => voi
         {salah && <div className="font-bold text-slate-500">Jawaban belum tepat, coba lagi.</div>}
         <div className="grid w-full max-w-xs grid-cols-3 gap-3">
           {['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0', 'OK'].map((d) => (
-            <button key={d} onClick={() => tekan(d)} className={`tombol py-4 text-2xl ${d === 'OK' ? 'bg-daun text-white' : 'bg-white'}`}>
+            <button key={d} onClick={() => tekan(d)} className={`${d === 'OK' ? 'tombol-game' : 'tombol bg-white'} py-4 text-2xl`}>
               {d}
             </button>
           ))}

@@ -87,7 +87,7 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
           <Nuri ukuran={180} ekspresi="sorak" dipakai={p.dipakai} />
         </div>
         <div className="rounded-3xl bg-white px-6 py-3 font-bold shadow">Teruslah membacanya setiap hari, ya!</div>
-        <button onClick={onKembali} className="tombol w-full max-w-sm bg-daun py-4 text-2xl text-white">
+        <button onClick={onKembali} className="tombol-game w-full max-w-sm py-4 text-2xl">
           Kembali
         </button>
       </div>
@@ -165,13 +165,13 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
           <div className="flex gap-3">
             <div className="flex-1 rounded-2xl bg-green-100 py-3 text-center font-extrabold text-green-800">✓ Ayat ini sudah lancar</div>
             {idx + 1 < ayat.length && (
-              <button onClick={() => setIdx(idx + 1)} className="tombol bg-daun px-6 text-xl text-white">
+              <button onClick={() => setIdx(idx + 1)} className="tombol-game px-6 text-xl">
                 ➜
               </button>
             )}
           </div>
         ) : (
-          <button onClick={() => setTanya(true)} className="tombol w-full bg-daun py-4 text-xl text-white">
+          <button onClick={() => setTanya(true)} className="tombol-game w-full py-4 text-xl">
             3. Aku sudah bisa membacanya!
           </button>
         )}
@@ -184,7 +184,7 @@ export default function HalamanSurat({ nomor, onKembali }: { nomor: number; onKe
             <div className="mt-1 text-xl font-extrabold">Sudahkah ananda membaca ayat {a.ayat} dengan benar{adaLatin ? ', tanpa melihat tulisan latin' : ''}?</div>
             <div className="mt-5 grid grid-cols-2 gap-3">
               <button onClick={() => setTanya(false)} className="tombol bg-slate-100 py-3 text-lg">Belum, ulang</button>
-              <button onClick={konfirmasi} className="tombol bg-daun py-3 text-lg text-white">Ya, lancar ✓</button>
+              <button onClick={konfirmasi} className="tombol-game py-3 text-lg">Ya, lancar ✓</button>
             </div>
           </div>
         </div>
