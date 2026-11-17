@@ -2,7 +2,11 @@
  * Pengatur halaman: menentukan layar mana yang tampil.
  * Juga menghitung waktu belajar & memeriksa batas waktu harian.
  */
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { dukungan3D } from './dunia3d/dukungan'
+import LayarMuat from './dunia3d/LayarMuat'
+
+const Dunia3D = lazy(() => import('./dunia3d/Dunia3D'))
 import { useProgres } from './lib/progres'
 import AreaOrtu from './pages/AreaOrtu'
 import GerbangOrtu from './pages/GerbangOrtu'
@@ -50,6 +54,9 @@ const LAYAR_ORTU = ['gerbang', 'ortu']
 export default function App() {
   const [layar, setLayar] = useState<Layar>({ nama: 'sambutan' })
   const { p, tambahWaktu, batasTercapai } = useProgres()
+  const dukungan = useMemo(() => dukungan3D(), [])
+  const [gagal3D, setGagal3D] = useState(false)
+  const pakai3D = !gagal3D && (p.tampilan === '3d' || (p.tampilan === 'otomatis' && dukungan.bisa))
   const atas = useRef<HTMLDivElement>(null)
 
   // Hitung waktu belajar: hanya saat app terlihat & anak sedang di layar anak.
@@ -89,7 +96,21 @@ export default function App() {
         isi = <Sambutan onMulai={() => ke(p.avatarDibuat ? { nama: 'peta' } : { nama: 'avatar', lanjut: 'peta' })} />
         break
       case 'peta':
-        isi = (
+        isi = pakai3D ? (
+          <Suspense fallback={<LayarMuat />}>
+            <Dunia3D
+              kualitas={dukungan.kualitas}
+              onGagal={() => setGagal3D(true)}
+              onPulau={(id) => ke({ nama: 'pulau', id })}
+              onRumah={() => ke({ nama: 'rumah' })}
+              onKoleksi={() => ke({ nama: 'koleksi' })}
+              onMisi={() => ke({ nama: 'misi' })}
+              onOrtu={() => ke({ nama: 'gerbang' })}
+              onLatihan={() => ke({ nama: 'latihan' })}
+              onEvent={() => ke({ nama: 'event' })}
+            />
+          </Suspense>
+        ) : (
           <Peta
             onPulau={(id) => ke({ nama: 'pulau', id })}
             onRumah={() => ke({ nama: 'rumah' })}

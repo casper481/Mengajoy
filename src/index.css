@@ -267,3 +267,13 @@ button {
   from { transform: translateX(-30%); }
   to { transform: translateX(130%); }
 }
+
+/* Hadiah melayang naik (dunia 3D) */
+.hadiah-melayang {
+  animation: melayang-naik 1.8s ease-out forwards;
+}
+@keyframes melayang-naik {
+  0% { transform: translateY(10px) scale(0.6); opacity: 0; }
+  15% { transform: translateY(0) scale(1.15); opacity: 1; }
+  100% { transform: translateY(-70px) scale(1); opacity: 0; }
+}

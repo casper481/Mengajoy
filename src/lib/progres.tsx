@@ -67,6 +67,7 @@ type Aksi = {
   bacaApresiasi: () => void
   selesaiEvent: () => void
   klaimPekan: (koin: number) => void
+  setTampilan: (t: 'otomatis' | '3d' | '2d') => void
   reset: () => void
   uji: (aksi: AksiUji) => void
   // nilai turunan
@@ -255,6 +256,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
     setP((s) => (s.pekanDiklaim === hariIni() ? s : { ...s, koin: s.koin + koin, pekanDiklaim: hariIni() }))
   }, [])
 
+  const setTampilan = useCallback((t: 'otomatis' | '3d' | '2d') => setP((s) => ({ ...s, tampilan: t })), [])
   const uji = useCallback((aksi: AksiUji) => {
     setP((s) => {
       const hi = hariIni()
@@ -349,6 +351,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       bacaApresiasi,
       selesaiEvent,
       klaimPekan,
+      setTampilan,
       reset,
       uji,
       streakAktif,
@@ -368,7 +371,7 @@ export function ProgresProvider({ children }: { children: ReactNode }) {
       apresiasiBaru: p.apresiasi.find((a) => !a.dibaca) ?? null,
       hariAktifPekanIni: pekan.filter((t) => (p.aktif[t] ?? 0) > 0 || p.streak.terakhir === t).length,
     }
-  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, tandaiAyat, klaim, klaimStreak, beliDekorasi, pasangDekorasi, setAvatar, setNamaPeliharaan, kirimApresiasi, bacaApresiasi, selesaiEvent, klaimPekan, reset, uji])
+  }, [p, mulai, selesaiStage, tandaiBelajar, pakai, selesaiMisi, tambahWaktu, setBatas, setEfek, setDemo, setNama, tandaiTamat, catatLatihan, tandaiAyat, klaim, klaimStreak, beliDekorasi, pasangDekorasi, setAvatar, setNamaPeliharaan, kirimApresiasi, bacaApresiasi, selesaiEvent, klaimPekan, setTampilan, reset, uji])
 
   return <Ctx.Provider value={nilai}>{children}</Ctx.Provider>
 }

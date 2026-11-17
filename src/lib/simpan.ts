@@ -38,6 +38,7 @@ export type Progres = {
   aktif: Record<string, number> // tanggal → detik belajar (30 hari terakhir)
   keluarga: number // aktivitas yang dikonfirmasi orang tua
   pekanDiklaim: string | null // tanggal Minggu saat peti pekan diklaim
+  tampilan: 'otomatis' | '3d' | '2d' // peta utama: dunia 3D atau peta 2D
 }
 
 export type Harian = {
@@ -82,6 +83,7 @@ export const PROGRES_AWAL: Progres = {
   aktif: {},
   keluarga: 0,
   pekanDiklaim: null,
+  tampilan: 'otomatis',
 }
 
 export function muat(): Progres {

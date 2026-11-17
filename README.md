@@ -46,6 +46,17 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 
 ---
 
+## Dunia 3D (prototipe, cabang `dunia-3d`)
+
+Layar peta utama bisa tampil sebagai **dunia kepulauan 3D** (React Three Fiber + Three.js + Drei).
+
+- Kode 3D ada di `src/dunia3d/` dan **dimuat terpisah** (lazy) — bundle utama tidak bertambah.
+- Semua objek dibentuk dari geometri sederhana (tanpa file model eksternal): pulau, rumah, pohon, kristal, air terjun, rumah kubah, peti, gembok, perahu, awan.
+- Karakter 3D: avatar anak (sesuai Buat Karakter), Momo (berkeliling & bereaksi, animasi menetas), Nuri (terbang).
+- Interaksi: geser 1 jari, cubit untuk zoom, ketuk pulau → kamera terbang + panel "Masuk", peti harian (+10 koin), animasi pulau baru terbuka, partikel koin/bintang/hati.
+- **Cadangan:** bila HP tidak mendukung WebGL/terlalu ringan, atau 3D gagal, otomatis memakai peta 2D. Orang tua bisa memilih di Area Orang Tua → Tampilan peta.
+- Beban saat ini (semua pulau terbuka): ±176 draw call, ±50 ribu segitiga. Perlu diuji di HP Android kelas menengah sungguhan.
+
 ## Dunia Mengajoy (sistem agar anak ingin kembali)
 
 Prinsip: **semua hadiah hanya dari belajar**. Tidak ada iklan, pembelian, atau hitung mundur; anak tidak dihukum saat absen.

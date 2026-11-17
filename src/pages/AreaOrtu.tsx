@@ -11,7 +11,7 @@ import { hariIni } from '../lib/tanggal'
 import TeksCampur from '../components/TeksCampur'
 
 export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () => void; onSertifikat: () => void }) {
-  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat, uji, level, kirimApresiasi } = useProgres()
+  const { p, detikHariIni, streakAktif, totalBintang, setBatas, setEfek, setDemo, setNama, reset, semuaTamat, uji, level, kirimApresiasi, setTampilan } = useProgres()
   const [stiker, setStiker] = useState(STIKER_APRESIASI[0])
   const [pesan, setPesan] = useState(PESAN_APRESIASI[0])
   const [terkirim, setTerkirim] = useState(false)
@@ -198,6 +198,23 @@ export default function AreaOrtu({ onKembali, onSertifikat }: { onKembali: () =>
           <div className="mt-2 text-sm text-slate-600">
             Sisa waktu hari ini: <b>{formatMenit(sisa)}</b>. Jika batas tercapai di tengah stage, anak boleh menyelesaikan stage itu dulu, lalu layar istirahat muncul sampai besok.
           </div>
+        </Bagian>
+
+        <Bagian judul="Tampilan peta">
+          <div className="grid grid-cols-3 gap-2">
+            {(
+              [
+                ['otomatis', 'Otomatis'],
+                ['3d', 'Dunia 3D'],
+                ['2d', 'Peta 2D'],
+              ] as const
+            ).map(([v, l]) => (
+              <button key={v} onClick={() => setTampilan(v)} className={`tombol py-3 text-base ${p.tampilan === v ? 'bg-laut text-white' : 'bg-slate-100'}`}>
+                {l}
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 text-sm text-slate-600">Otomatis: dunia 3D dipakai bila HP mendukung, selain itu peta 2D. Pilih "Peta 2D" bila HP terasa berat atau panas.</div>
         </Bagian>
 
         <Bagian judul="Pengaturan">
