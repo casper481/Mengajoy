@@ -29,6 +29,7 @@ import Koleksi from './pages/Koleksi'
 import Streak from './pages/Streak'
 import EventMingguan from './pages/EventMingguan'
 import { NavCtx } from './lib/navigasi'
+import { Tampilan3DCtx } from './lib/tampilan3d'
 import type { Tujuan } from './lib/misiHarian'
 
 type Layar =
@@ -179,10 +180,12 @@ export default function App() {
 
   return (
     <NavCtx.Provider value={{ keStreak: () => ke({ nama: 'streak' }) }}>
+    <Tampilan3DCtx.Provider value={{ pakai3D, kualitas: dukungan.kualitas, gagal: () => setGagal3D(true) }}>
     <div ref={atas} className="relative mx-auto flex min-h-full w-full max-w-md flex-col">
       {!istirahat && !['sambutan', 'peta', 'rumah'].includes(layar.nama) && !(layar.nama === 'pulau' && layar.id !== 6) && <LatarLembut />}
       <div className="relative z-10 flex min-h-full flex-1 flex-col">{isi}</div>
     </div>
+    </Tampilan3DCtx.Provider>
     </NavCtx.Provider>
   )
 }

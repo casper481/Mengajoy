@@ -1,5 +1,9 @@
 /** Satu stage = Kenalan → Tebak Suara → Cari Pasangan / Susun Suku Kata → Perayaan. */
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
+import { useTampilan3D } from '../lib/tampilan3d'
+import { tahapPeliharaan } from '../data/dunia'
+
+const Perayaan3D = lazy(() => import('../dunia3d/Perayaan3D'))
 import CariPasangan from '../activities/CariPasangan'
 import PilihJawaban from '../activities/PilihJawaban'
 import Kenalan from '../activities/Kenalan'
@@ -79,6 +83,7 @@ export default function HalamanStage({ stageId, onKembali, onUlang, onTamat }: P
 
 function Perayaan({ bintang, koin, xp, hadiahId, pulauSelesai, tamat, onLanjut, onUlang }: { bintang: number; koin: number; xp: number; hadiahId: string | null; pulauSelesai: boolean; tamat: boolean; onLanjut: () => void; onUlang: () => void }) {
   const { p } = useProgres()
+  const { pakai3D, kualitas, gagal } = useTampilan3D()
   const hadiah = hadiahId ? hadiahById(hadiahId) : null
   // tampilkan Nuri memakai hadiah barunya
   const dipakai = hadiah ? { ...p.dipakai, [hadiah.slot]: hadiah.id } : p.dipakai
@@ -102,9 +107,17 @@ function Perayaan({ bintang, koin, xp, hadiahId, pulauSelesai, tamat, onLanjut, 
 
       <div className="relative flex flex-col items-center">
         <div className="sinar left-1/2 top-[38%]" style={{ marginLeft: -260, marginTop: -260 }} />
-        <div className="animate-lompat relative">
-          <Nuri ukuran={190} ekspresi="sorak" dipakai={dipakai} />
-        </div>
+        {pakai3D ? (
+          <div className="relative h-[220px] w-[340px] max-w-full">
+            <Suspense fallback={null}>
+              <Perayaan3D avatar={p.avatar} tahap={tahapPeliharaan(p.xp)} adaHadiah={!!hadiah} bintang={bintang} nuriDipakai={dipakai} kualitas={kualitas} onGagal={gagal} />
+            </Suspense>
+          </div>
+        ) : (
+          <div className="animate-lompat relative">
+            <Nuri ukuran={190} ekspresi="sorak" dipakai={dipakai} />
+          </div>
+        )}
         {hadiah ? (
           <div className="panel-game animate-masuk relative mt-2 px-6 py-3 text-center" style={{ animationDelay: '1.4s' }}>
             <div className="text-sm font-extrabold text-[#9a7b4f]">🎁 Hadiah baru untuk Nuri!</div>

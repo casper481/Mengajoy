@@ -46,7 +46,7 @@ Hasilnya ada di folder `dist/`. Isi folder ini bisa diunggah ke hosting statis a
 
 ---
 
-## Dunia 3D (prototipe, cabang `dunia-3d`)
+## Dunia 3D
 
 Layar peta utama bisa tampil sebagai **dunia kepulauan 3D** (React Three Fiber + Three.js + Drei).
 
@@ -54,6 +54,9 @@ Layar peta utama bisa tampil sebagai **dunia kepulauan 3D** (React Three Fiber +
 - Semua objek dibentuk dari geometri sederhana (tanpa file model eksternal): pulau, rumah, pohon, kristal, air terjun, rumah kubah, peti, gembok, perahu, awan.
 - Karakter 3D: avatar anak (sesuai Buat Karakter), Momo (berkeliling & bereaksi, animasi menetas), Nuri (terbang).
 - Interaksi: geser 1 jari, cubit untuk zoom, ketuk pulau → kamera terbang + panel "Masuk", peti harian (+10 koin), animasi pulau baru terbuka, partikel koin/bintang/hati.
+- **Pulau Rumahku 3D** (`PulauRumah3D.tsx`): dekorasi anak tampil 3D (`Dekorasi3D.tsx`), tempat dekorasi diketuk langsung, kamera bisa diputar sedikit.
+- **Bermain dengan Momo**: Elus, Beri makan (apel dikunyah), Main bola (Momo mengejar bola). Beri makan & main memberi +5 XP sekali sehari.
+- **Perayaan 3D** (`Perayaan3D.tsx`): karakter, Momo & Nuri (memakai aksesorisnya) bersorak, peti hadiah terbuka.
 - **Cadangan:** bila HP tidak mendukung WebGL/terlalu ringan, atau 3D gagal, otomatis memakai peta 2D. Orang tua bisa memilih di Area Orang Tua → Tampilan peta.
 - Beban saat ini (semua pulau terbuka): ±176 draw call, ±50 ribu segitiga. Perlu diuji di HP Android kelas menengah sungguhan.
 

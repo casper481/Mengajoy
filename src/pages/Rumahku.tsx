@@ -1,5 +1,10 @@
 /** Pulau Rumahku: pulau milik anak, berisi karakternya, Momo, dan dekorasi dari koin hasil belajar. */
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
+import { useTampilan3D } from '../lib/tampilan3d'
+import type { AksiMomo } from '../dunia3d/PulauRumah3D'
+import { boing, cicit } from '../lib/efekSuara'
+
+const PulauRumah3D = lazy(() => import('../dunia3d/PulauRumah3D'))
 import Avatar from '../components/Avatar'
 import BarAtas from '../components/BarAtas'
 import { GambarDekorasi } from '../components/dunia/Dekorasi'
@@ -15,10 +20,29 @@ const W = 400
 const H = 420
 
 export default function Rumahku({ onKembali, onAvatar }: { onKembali: () => void; onAvatar: () => void }) {
-  const { p, level, beliDekorasi, pasangDekorasi, setNamaPeliharaan } = useProgres()
+  const { p, level, beliDekorasi, pasangDekorasi, setNamaPeliharaan, harian, klaim } = useProgres()
   const [slotDipilih, setSlotDipilih] = useState<string | null>(null)
   const [panelMomo, setPanelMomo] = useState(false)
   const [lompat, setLompat] = useState(0)
+  const { pakai3D, kualitas, gagal } = useTampilan3D()
+  const [aksi, setAksi] = useState<AksiMomo>({ elus: 0, makan: 0, main: 0 })
+  const [pesanMomo, setPesanMomo] = useState<string | null>(null)
+  const mainMomo = (k: keyof AksiMomo) => {
+    setAksi((x) => ({ ...x, [k]: x[k] + 1 }))
+    setLompat((n) => n + 1)
+    if (k === 'elus') cicit()
+    else boing()
+    // memberi makan & bermain: +5 XP sekali sehari (Momo ikut tumbuh)
+    const id = k === 'makan' ? 'makan-momo' : k === 'main' ? 'main-momo' : null
+    const nama = p.namaPeliharaan
+    if (id && !harian.diklaim.includes(id)) {
+      klaim(id, 0, 5)
+      setPesanMomo(k === 'makan' ? `🍎 ${nama} kenyang! +5 XP` : `⚽ ${nama} senang bermain! +5 XP`)
+    } else {
+      setPesanMomo(k === 'elus' ? `💕 ${nama} suka dielus!` : k === 'makan' ? `🍎 ${nama} sudah kenyang hari ini` : `⚽ Main lagi, seru!`)
+    }
+    setTimeout(() => setPesanMomo(null), 2200)
+  }
   const tahap = tahapPeliharaan(p.xp)
   const slot = SLOT_RUMAH.find((s) => s.id === slotDipilih)
 
@@ -37,7 +61,28 @@ export default function Rumahku({ onKembali, onAvatar }: { onKembali: () => void
         </button>
       </div>
 
-      {/* pulau */}
+      {/* pulau: 3D bila didukung, selain itu 2D */}
+      {pakai3D ? (
+        <div className="relative mt-2 w-full" style={{ aspectRatio: '400 / 430' }}>
+          <Suspense fallback={<div className="flex h-full items-center justify-center font-extrabold text-white">Menyiapkan pulau...</div>}>
+            <PulauRumah3D
+              slot={p.dekorasi.slot}
+              level={level}
+              avatar={p.avatar}
+              tahap={tahap}
+              aksi={aksi}
+              kualitas={kualitas}
+              onGagal={gagal}
+              onSlot={(id) => {
+                pop()
+                const s = SLOT_RUMAH.find((x) => x.id === id)!
+                if (level >= s.level) setSlotDipilih(id)
+              }}
+              onMomo={() => setPanelMomo(true)}
+            />
+          </Suspense>
+        </div>
+      ) : (
       <div className="relative mt-2 w-full" style={{ aspectRatio: `${W} / ${H}` }}>
         <Laut />
         <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full" aria-hidden>
@@ -116,6 +161,38 @@ export default function Rumahku({ onKembali, onAvatar }: { onKembali: () => void
           )
         })}
       </div>
+
+      )}
+
+      {/* bermain dengan Momo */}
+      <div className="relative z-10 mx-3 mt-2 grid grid-cols-3 gap-2">
+        {(
+          [
+            ['elus', '💕', 'Elus'],
+            ['makan', '🍎', 'Beri makan'],
+            ['main', '⚽', 'Main bola'],
+          ] as const
+        ).map(([k, ikon, label]) => (
+          <button
+            key={k}
+            onClick={() => mainMomo(k)}
+            disabled={tahap === 0}
+            className={`tombol-game ${k === 'elus' ? 'merah' : k === 'makan' ? 'jeruk' : 'biru'} flex flex-col items-center py-2 text-sm`}
+          >
+            <span className="text-2xl leading-none">{ikon}</span>
+            {label}
+          </button>
+        ))}
+      </div>
+      {tahap === 0 && <div className="mx-3 mt-1 text-center text-xs font-bold text-white drop-shadow">Momo masih di dalam telur. Terus belajar supaya menetas!</div>}
+
+      {pesanMomo && (
+        <div className="pointer-events-none fixed inset-x-0 top-24 z-40 flex justify-center px-6">
+          <div key={pesanMomo} className="panel-game animate-masuk px-4 py-2 text-center font-extrabold text-[#6b4e24]">
+            {pesanMomo}
+          </div>
+        </div>
+      )}
 
       {/* info koin */}
       <div className="relative z-10 mx-3 mt-3 panel-game px-4 py-3 text-center">

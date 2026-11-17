@@ -179,22 +179,35 @@ export function Momo3D({
   onTap,
   lompat,
   menetas,
+  target = null,
+  kunyah = 0,
+  diam = false,
+  sorak = false,
 }: {
   tahap: number
   pusat: [number, number, number]
   onTap?: (e: ThreeEvent<MouseEvent>) => void
   lompat: number
   menetas: number // berubah nilainya untuk memainkan animasi menetas
+  target?: [number, number, number] | null // bila ada, Momo berjalan ke sana (mis. mengejar bola)
+  kunyah?: number // berubah nilainya → animasi mengunyah
+  diam?: boolean // berdiri di tempat menghadap kamera
+  sorak?: boolean // melompat-lompat gembira (perayaan)
 }) {
   const akar = useRef<THREE.Group>(null)
   const sayap = useRef<THREE.Group>(null)
   const telur = useRef<THREE.Group>(null)
   const badan = useRef<THREE.Group>(null)
-  const mulai = useRef({ id: 0, t: -10, tetas: 0, tt: -10 })
+  const mulai = useRef({ id: 0, t: -10, tetas: 0, tt: -10, kunyah: 0, tk: -10 })
+  const pos = useRef(new THREE.Vector3(...pusat))
   const ukuran = tahap <= 1 ? 0.75 : tahap === 2 ? 0.88 : 1
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, dt) => {
     const t = clock.elapsedTime
+    if (kunyah !== mulai.current.kunyah) {
+      mulai.current.kunyah = kunyah
+      mulai.current.tk = t
+    }
     if (lompat !== mulai.current.id) {
       mulai.current.id = lompat
       mulai.current.t = t
@@ -206,16 +219,25 @@ export function Momo3D({
     const j = t - mulai.current.t
     const tt = t - mulai.current.tt
     if (!akar.current) return
-    // berjalan berkeliling pelan di sekitar pemain
+    // posisi tujuan: target (mis. bola), diam di tempat, atau berkeliling pelan di sekitar pemain
     const sudut = t * 0.35
     const r = 1.05
-    const x = pusat[0] + Math.cos(sudut) * r
-    const z = pusat[2] + Math.sin(sudut) * r * 0.7
-    const hop = tahap > 0 ? Math.abs(Math.sin(t * 5)) * 0.08 : 0
+    const tujuan = target
+      ? new THREE.Vector3(...target)
+      : diam || tahap === 0
+        ? new THREE.Vector3(pusat[0] + (diam ? 0 : 0.9), pusat[1], pusat[2] + (diam ? 0 : 0.35))
+        : new THREE.Vector3(pusat[0] + Math.cos(sudut) * r, pusat[1], pusat[2] + Math.sin(sudut) * r * 0.7)
+    const sebelum = pos.current.clone()
+    pos.current.lerp(tujuan, Math.min(1, dt * (target ? 3.5 : 6)))
+    const gerak = pos.current.clone().sub(sebelum)
+    const jalan = gerak.length() > 0.002
+    const hop = tahap > 0 ? Math.abs(Math.sin(t * (sorak ? 7 : 5))) * (sorak ? 0.35 : jalan || !diam ? 0.08 : 0.02) : 0
     const naik = j < 0.7 ? Math.sin((j / 0.7) * Math.PI) * 0.7 : 0
-    akar.current.position.set(tahap > 0 ? x : pusat[0] + 0.9, pusat[1] + hop + naik, tahap > 0 ? z : pusat[2] + 0.35)
-    akar.current.rotation.y = tahap > 0 ? -sudut + Math.PI : 0.6
-    if (j < 0.7) akar.current.rotation.y += j * Math.PI * 2.85
+    akar.current.position.set(pos.current.x, pusat[1] + hop + naik, pos.current.z)
+    if (tahap > 0 && jalan) akar.current.rotation.y = Math.atan2(gerak.x, gerak.z)
+    else if (diam || tahap === 0) akar.current.rotation.y += ((tahap === 0 ? 0.6 : 0.25) - akar.current.rotation.y) * Math.min(1, dt * 5)
+    if (j < 0.7) akar.current.rotation.y += dt * Math.PI * 4
+
     // telur bergoyang; saat menetas goyang makin kencang
     if (telur.current) {
       const kuat = tt < 1.6 ? 0.08 + tt * 0.22 : 0.07 * (Math.sin(t * 0.8) > 0.7 ? 1 : 0)
@@ -226,6 +248,9 @@ export function Momo3D({
       const muncul = tt >= 1.6 && tt < 2.3 ? (tt - 1.6) / 0.7 : tt < 1.6 && tahap > 0 && tt >= 0 ? 0 : 1
       const pegas = muncul < 1 ? 1 + Math.sin(muncul * Math.PI * 2.5) * 0.25 * (1 - muncul) : 1
       badan.current.scale.setScalar(ukuran * Math.min(1, muncul * 1.2) * pegas)
+      // mengunyah: badan memipih-memanjang beberapa kali
+      const k = t - mulai.current.tk
+      if (k < 1.4) badan.current.scale.y *= 1 + Math.sin(k * 22) * 0.1
       badan.current.visible = tahap > 0 && !(tt >= 0 && tt < 1.6)
     }
     if (sayap.current) sayap.current.rotation.z = Math.sin(t * 9) * 0.35
@@ -323,7 +348,7 @@ export function Momo3D({
 }
 
 /* ======================= NURI ======================= */
-export function Nuri3D({ position, onTap, putar }: { position: [number, number, number]; onTap?: (e: ThreeEvent<MouseEvent>) => void; putar: number }) {
+export function Nuri3D({ position, onTap, putar, dipakai = {} }: { position: [number, number, number]; onTap?: (e: ThreeEvent<MouseEvent>) => void; putar: number; dipakai?: Partial<Record<string, string>> }) {
   const akar = useRef<THREE.Group>(null)
   const sayapKiri = useRef<THREE.Mesh>(null)
   const sayapKanan = useRef<THREE.Mesh>(null)
@@ -369,10 +394,97 @@ export function Nuri3D({ position, onTap, putar }: { position: [number, number, 
           {mat('#2b2b3a', { roughness: 0.2 })}
         </mesh>
       ))}
-      <mesh position={[0.02, 0.4, 0]} rotation={[0, 0, 0.3]} scale={[0.4, 1, 0.4]}>
-        <sphereGeometry args={[0.1, 10, 8]} />
-        {mat('#3aa9d6')}
-      </mesh>
+      {!dipakai.kepala && (
+        <mesh position={[0.02, 0.4, 0]} rotation={[0, 0, 0.3]} scale={[0.4, 1, 0.4]}>
+          <sphereGeometry args={[0.1, 10, 8]} />
+          {mat('#3aa9d6')}
+        </mesh>
+      )}
+      <AksesorisNuri3D dipakai={dipakai} />
+    </group>
+  )
+}
+
+/** Aksesoris Nuri versi 3D (padanan aksesoris 2D di Lemari Nuri). */
+function AksesorisNuri3D({ dipakai }: { dipakai: Partial<Record<string, string>> }) {
+  const kepala = dipakai.kepala
+  const leher = dipakai.leher
+  const mata = dipakai.mata
+  const WARNA_KEPALA: Record<string, string> = { peci: '#2f4a8a', 'topi-petualang': '#d6b07a', 'topi-bintang': '#9b8cf2', 'mahkota-bunga': '#ff8fab', 'mahkota-emas': '#ffc93c', 'topi-wisuda': '#2b2b3a' }
+  const WARNA_LEHER: Record<string, string> = { 'syal-merah': '#ef476f', 'syal-pelangi': '#ffd166', 'dasi-kupu': '#ef476f', 'kalung-bunga': '#ff8fab' }
+  return (
+    <group>
+      {kepala === 'peci' && (
+        <mesh position={[0, 0.33, 0]} castShadow>
+          <cylinderGeometry args={[0.2, 0.22, 0.14, 20]} />
+          {mat(WARNA_KEPALA.peci)}
+        </mesh>
+      )}
+      {kepala === 'topi-petualang' && (
+        <group position={[0, 0.32, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.34, 0.34, 0.03, 24]} />
+            {mat('#b8925a')}
+          </mesh>
+          <mesh position={[0, 0.09, 0]}>
+            <cylinderGeometry args={[0.17, 0.2, 0.18, 20]} />
+            {mat(WARNA_KEPALA['topi-petualang'])}
+          </mesh>
+        </group>
+      )}
+      {kepala === 'topi-bintang' && (
+        <group position={[0, 0.32, 0]}>
+          <mesh position={[0, 0.17, 0]}>
+            <coneGeometry args={[0.17, 0.38, 20]} />
+            {mat(WARNA_KEPALA['topi-bintang'])}
+          </mesh>
+          <mesh position={[0, 0.38, 0]}>
+            <octahedronGeometry args={[0.06, 0]} />
+            {mat('#ffc93c', { emissive: '#ffb300', emissiveIntensity: 0.5 })}
+          </mesh>
+        </group>
+      )}
+      {(kepala === 'mahkota-emas' || kepala === 'mahkota-bunga') && (
+        <group position={[0, 0.33, 0]}>
+          {[0, 1, 2, 3, 4, 5].map((i) => {
+            const a = (i / 6) * Math.PI * 2
+            return (
+              <mesh key={i} position={[Math.cos(a) * 0.17, 0.05, Math.sin(a) * 0.17]}>
+                {kepala === 'mahkota-emas' ? <coneGeometry args={[0.05, 0.14, 6]} /> : <sphereGeometry args={[0.06, 10, 8]} />}
+                {mat(kepala === 'mahkota-emas' ? '#ffc93c' : ['#ff8fab', '#ffd166', '#c8b6ff'][i % 3], { metalness: kepala === 'mahkota-emas' ? 0.5 : 0 })}
+              </mesh>
+            )
+          })}
+        </group>
+      )}
+      {kepala === 'topi-wisuda' && (
+        <group position={[0, 0.34, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.17, 0.19, 0.1, 20]} />
+            {mat('#2b2b3a')}
+          </mesh>
+          <mesh position={[0, 0.07, 0]} rotation={[0, Math.PI / 4, 0]}>
+            <boxGeometry args={[0.46, 0.03, 0.46]} />
+            {mat('#33334a')}
+          </mesh>
+        </group>
+      )}
+      {leher && WARNA_LEHER[leher] && (
+        <mesh position={[0, -0.18, 0.04]} rotation={[Math.PI / 2 - 0.25, 0, 0]}>
+          <torusGeometry args={[0.24, 0.06, 8, 24]} />
+          {mat(WARNA_LEHER[leher])}
+        </mesh>
+      )}
+      {mata && (
+        <group position={[0, 0.12, 0.33]}>
+          {[-0.13, 0.13].map((x) => (
+            <mesh key={x} position={[x, 0, 0]}>
+              <torusGeometry args={[0.08, 0.014, 6, 18]} />
+              {mat(mata === 'kacamata-hitam' ? '#2b2b3a' : mata === 'kacamata-bintang' ? '#ff8fab' : '#7a4b2a')}
+            </mesh>
+          ))}
+        </group>
+      )}
     </group>
   )
 }

@@ -338,7 +338,7 @@ export default function Dunia3D(props: Props) {
             {!harian.diklaim.includes('peti') && <Sparkles count={14} scale={[1, 1, 1]} size={4} speed={0.6} position={[rumah.x - 1.25, ATAS + 0.6, rumah.z + 0.8]} color="#ffe066" />}
 
             {/* Nuri menunggu di pulau aktif */}
-            <Nuri3D position={[aktif.x + 1.5, ATAS + 2.1, aktif.z + 0.9]} onTap={ketukNuri} putar={putarNuri} />
+            <Nuri3D position={[aktif.x + 1.5, ATAS + 2.1, aktif.z + 0.9]} onTap={ketukNuri} putar={putarNuri} dipakai={p.dipakai} />
 
             {/* suasana */}
             <AwanBerjalan />

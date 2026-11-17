@@ -99,6 +99,17 @@ Buka app di HP, lalu ikuti urutannya. Total sekitar **20–30 menit**.
 - ☐ Orang Tua → **Laporan 7 hari** (grafik menit per hari)
 - ☐ Orang Tua → **Kirim apresiasi** (stiker + pesan) → kembali ke peta → pesan muncul untuk anak (+20 koin)
 
+## O. Dunia 3D
+- ☐ Peta utama tampil 3D (Orang Tua → Tampilan peta → Dunia 3D bila HP tidak memilih otomatis)
+- ☐ Geser 1 jari, cubit untuk zoom; ketuk pulau → kamera terbang + panel "Masuk ▶"
+- ☐ Ketuk peti berkilau di Pulau Rumahku → koin memancar, "+10 🪙" (sekali sehari)
+- ☐ Ketuk avatar (melompat + hati), Momo (bereaksi), Nuri (mengajak ke pulau aktif)
+- ☐ Selesaikan pulau → saat kembali ke peta, kamera terbang ke pulau baru & awan menghilang
+- ☐ Alat Uji Coba → Tambah XP → kembali ke peta: telur Momo menetas / Momo tumbuh
+- ☐ Rumahku 3D: dekorasi tampil 3D; ketuk "+" untuk memasang; tombol Elus / Beri makan / Main bola
+- ☐ Selesaikan stage → perayaan 3D (peti terbuka bila ada hadiah, Nuri memakai aksesorisnya)
+- ☐ Perhatikan kelancaran di HP. Bila berat/panas → pilih "Peta 2D"
+
 ---
 
 **Catat yang tidak sesuai**: nomor bagian + apa yang terjadi + (kalau bisa) tangkapan layar. Kirim ke Claude untuk diperbaiki.
